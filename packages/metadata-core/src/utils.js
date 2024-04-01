@@ -581,6 +581,9 @@ const utils = {
 			return true;
 		}
 		if (tv1 === tv2) {
+      if (v1 instanceof Date || v1 instanceof Date) {
+        return this.fix_date(v1).valueOf() === this.fix_date(v2).valueOf();
+      }
 			return false;
 		}
     if (tv1 === 'boolean' || tv2 === 'boolean') {

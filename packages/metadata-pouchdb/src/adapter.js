@@ -1384,9 +1384,9 @@ function adapter({AbstracrAdapter}) {
     /**
      * Загружает объекты из PouchDB по массиву ссылок
      *
-     * @param _mgr {DataManager}
-     * @param refs {Array}
-     * @param with_attachments {Boolean}
+     * @param {DataManager} [_mgr]
+     * @param {Array} refs
+     * @param {Boolean} [with_attachments]
      * @return {*}
      */
     load_array(_mgr, refs, with_attachments, db) {
