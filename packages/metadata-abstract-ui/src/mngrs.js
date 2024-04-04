@@ -91,14 +91,14 @@ export default function mngrs() {
           // для связей параметров выбора, значение берём из объекта
           _meta.choice_links && _meta.choice_links.forEach((choice) => {
             if(choice.name && choice.name[0] == 'selection') {
+              if(choice.name[1] == 'owner' && !has_owners) {
+                return;
+              }
               if(utils.is_tabular(_obj)) {
                 if(choice.path.length < 2) {
                   select[choice.name[1]] = typeof choice.path[0] == 'function' ? choice.path[0] : _obj._owner._owner[choice.path[0]];
                 }
                 else {
-                  if(choice.name[1] == 'owner' && !has_owners) {
-                    return;
-                  }
                   select[choice.name[1]] = _obj[choice.path[1]];
                 }
               }
