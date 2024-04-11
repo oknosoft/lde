@@ -1,7 +1,7 @@
 {
   "name": "metadata-core",
   "description": "The core of metadata.js as a standalone package",
-  "version": "2.0.34-beta.2",
+  "version": "2.0.34-beta.3",
   "author": "Evgeniy Malyarov <info@oknosoft.ru> (http://www.oknosoft.ru)",
   "license": "MIT",
   "engines": {
@@ -9,9 +9,9 @@
     "yarn": "^1.22"
   },
   "dependencies": {
-    "alasql": "^4.2",
+    "alasql": "^4.3",
     "debug": "^4.3",
-    "moment": "^2.29",
+    "moment": "^2.30",
     "uuid": "^8.3"
   },
   "repository": {
