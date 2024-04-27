@@ -169,7 +169,7 @@ export class BaseDataObj extends OwnerObj {
 
 
     // для перечислений и табличных частей, возвращаем значение в лоб
-    if(_manager.isEnum) {
+    if(this._manager.isEnum) {
       return res;
     }
 
@@ -177,7 +177,7 @@ export class BaseDataObj extends OwnerObj {
       return res;
     }
 
-    const {utils} = _manager;
+    const {utils} = this._manager;
 
     if(type.isRef) {
 
@@ -189,15 +189,19 @@ export class BaseDataObj extends OwnerObj {
         return res;
       }
 
-      const mgr = _manager.value_mgr(_obj, f, type);
-      if(mgr) {
-        if(utils.is.dataMgr(mgr)) {
-          return mgr.get(res, false, false);
-        }
-        else {
-          return utils.fetch_type(res, mgr);
-        }
-      }
+      // затычка
+      const mgr = fMeta[own].mgr(type.types.find(v => v.includes('.') || type.types[0]));
+      return mgr?.get?.(res);
+
+      // const mgr = _manager.value_mgr(_obj, f, type);
+      // if(mgr) {
+      //   if(utils.is.dataMgr(mgr)) {
+      //     return mgr.get(res, false, false);
+      //   }
+      //   else {
+      //     return utils.fetch_type(res, mgr);
+      //   }
+      // }
 
       if(res) {
         // управляемый лог
