@@ -1302,24 +1302,14 @@ export class DataProcessorObj extends DataObj {
 
   constructor(attr, manager, loading) {
 
+    const direct = loading && attr && manager.utils.is.guid(attr.ref);
+
     // выполняем конструктор родительского объекта
-    super(attr, manager, loading);
+    super(attr, manager, loading, direct);
 
-    if(!loading) {
-      const {fields, tabular_sections} = manager.metadata();
-      for (const fld in fields) {
-        if(!attr[fld]) {
-          attr[fld] = this.fetch_type('', fields[fld].type);
-        }
-      }
-      for (const fld in tabular_sections) {
-        if(!attr[fld]) {
-          attr[fld] = [];
-        }
-      }
+    if(!direct) {
+      manager.utils.mixin(this, attr, null, ['ref']);
     }
-
-    manager.utils.mixin(this, attr);
   }
 }
 
