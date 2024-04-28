@@ -320,7 +320,7 @@ export class DataManager extends MetaEventEmitter{
 	 */
 	optionList(selection = {}, val){
 
-		let l = [], input_by_string, text;
+		let l = [], inputBy, text;
 
     function push(v) {
       if (selection._dhtmlx) {
@@ -342,11 +342,11 @@ export class DataManager extends MetaEventEmitter{
     }
 
     // поиск по строке
-    if(selection.presentation && (input_by_string = this.metadata().input_by_string)) {
+    if(selection.presentation && (inputBy = this.metadata().inputBy)) {
       text = selection.presentation.like;
       delete selection.presentation;
       selection.or = [];
-      input_by_string.forEach((fld) => {
+      inputBy.forEach((fld) => {
         const sel = {};
         sel[fld] = {like: text};
         selection.or.push(sel);
@@ -365,7 +365,6 @@ export class DataManager extends MetaEventEmitter{
         return l;
       });
   }
-
 
 	/**
 	 * Возвращает промис со структурой печатных форм объекта
@@ -424,6 +423,13 @@ export class DataManager extends MetaEventEmitter{
    */
   [Symbol.iterator]() {
     return new Iterator(this.#alatable);
+  }
+
+  /**
+   * @summary Заглушка для совместимости с v2.1
+   */
+  value_mgr(obj, fld, type) {
+    return this.root.md.get(type.types.find(v => v.includes('.')));
   }
 
 }

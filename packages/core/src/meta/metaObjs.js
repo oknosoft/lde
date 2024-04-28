@@ -265,6 +265,27 @@ export class MetaField extends OwnerObj {
     return utils.fix.type(v, type);
   }
 
+  /**
+   * @summary Синоним для совместимости с v2.1
+   */
+  get choice_params() {
+    return this.choiceParams;
+  }
+
+  /**
+   * @summary Синоним для совместимости с v2.1
+   */
+  get choice_links() {
+    return this.choiceLinks;
+  }
+
+  /**
+   * @summary Синоним для совместимости с v2.1
+   */
+  get choice_groups_elm() {
+    return this.choiceGrp;
+  }
+
 }
 
 /**
