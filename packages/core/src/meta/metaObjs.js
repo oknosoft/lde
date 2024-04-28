@@ -435,6 +435,21 @@ export class TypeDef {
     return !this.isComposite && !this.isRef;
   }
 
+  hasType(type) {
+    for(const name of this.types) {
+      if(type === name) {
+        return true;
+      }
+      const parts = name.split('.');
+      if(parts.length === 2) {
+        if(type === `${parts[0]}.${camelcase(parts[1])}`) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 }
 
 const tabularType = new TypeDef({types: ['tabular']});

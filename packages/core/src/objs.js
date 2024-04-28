@@ -279,11 +279,11 @@ export class BaseDataObj extends OwnerObj {
       else {
         obj[f] = utils.fix.guid(v);
 
-        if(utils.is.dataObj(v) && mf.types.indexOf(v._manager.className) != -1) {
+        if(utils.is.dataObj(v) && mf.hasType(v._manager.className)) {
 
         }
         else {
-          let mgr = this._manager.value_mgr(obj, f, mf, false, v);
+          let mgr = v?._manager || this._manager.value_mgr(obj, f, mf, false, v).mgr;
           if(mgr) {
             if(mgr.isEnum()) {
               if(typeof v === string) {
@@ -295,9 +295,8 @@ export class BaseDataObj extends OwnerObj {
               else if(typeof v === 'object') {
                 obj[f] = v.ref || v.name || '';
               }
-
             }
-            else if(v && v.presentation) {
+            else if(v?.presentation) {
               if(v.type && !(v instanceof DataObj)) {
                 delete v.type;
               }
