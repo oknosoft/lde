@@ -1,5 +1,5 @@
 /*!
- metadata-core v2.0.34-beta.3, built:2024-04-11
+ metadata-core v2.0.34-beta.3, built:2024-05-03
  © 2014-2022 Evgeniy Malyarov and the Oknosoft team http://www.oknosoft.ru
  metadata.js may be freely distributed under the MIT
  To obtain commercial license and technical support, contact info@oknosoft.ru
@@ -1257,13 +1257,15 @@ class DataObj extends BaseDataObj {
             const {_manager} = v;
             const {adapter} = _manager;
             const db = adapter.db(_manager);
-            if(!adapters.get(adapter)) {
-              adapters.set(adapter, new Map());
+            if(db) {
+              if(!adapters.get(adapter)) {
+                adapters.set(adapter, new Map());
+              }
+              if(!adapters.get(adapter).get(db)){
+                adapters.get(adapter).set(db, new Set());
+              }
+              adapters.get(adapter).get(db).add(`${v.class_name}|${v.ref}`);
             }
-            if(!adapters.get(adapter).get(db)){
-              adapters.get(adapter).set(db, new Set());
-            }
-            adapters.get(adapter).get(db).add(`${v.class_name}|${v.ref}`);
           }
         }
       }
