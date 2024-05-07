@@ -1416,8 +1416,11 @@ export class DocObj extends NumberDocAndDate(DataObj) {
     if(this.empty()) {
       return '';
     }
-    const meta = this._metadata();
     const {number_doc, date, posted, _modified} = this;
+    const meta = this._metadata();
+    if(this.is_new()) {
+      return `${meta.obj_presentation || meta.synonym} ${number_doc ? `№${number_doc}` : '(новый)'} (не записан) *`;
+    }
     return number_doc ?
       `${meta.obj_presentation || meta.synonym}  №${number_doc} от ${moment(date).format(moment._masks.date_time)} (${posted ? '' : 'не '}проведен)${_modified ? ' *' : ''}`
       :
