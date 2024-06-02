@@ -1145,6 +1145,67 @@ export class DataObj extends BaseDataObj {
   }
 
   /**
+   * @summary Возвращает связанные ссылки глубоким перебором
+   * @desc За исключением типов, перечисленных в `excludeTypes`
+   * @return {Set}
+   */
+  _links(set, excludeTypes = []) {
+    const tmp = new Set();
+    const {fields, tabular_sections} = this._metadata();
+    const {_obj, _manager: {_owner}} = this;
+    const {md} = _owner.$p;
+
+    if(this.empty() || this.is_new()){
+      return tmp;
+    }
+
+    for (const fld in fields) {
+      const {type} = fields[fld];
+      if (type.is_ref && _obj.hasOwnProperty(fld) && _obj[fld] && !utils.is_empty_guid(_obj[fld])) {
+        const v = this[fld];
+        if(v instanceof DataObj && !v.empty() && !set.has(v)) {
+          if(excludeTypes.includes(v.class_name)) {
+            continue;
+          }
+          if(v.class_name.startsWith('enm')) {
+            excludeTypes.push(v.class_name);
+          }
+          else {
+            tmp.add(v);
+          }
+        }
+      }
+    }
+
+    for(const ts in tabular_sections) {
+      if (_obj.hasOwnProperty(ts)) {
+        const {fields} = tabular_sections[ts];
+        for(const row of this[ts]) {
+          for(const fld in fields) {
+            const {type} = fields[fld];
+            if (type.is_ref) {
+              const v = row[fld];
+              if (v instanceof DataObj && !v.empty() && !set.has(v)) {
+                if(excludeTypes.includes(v.class_name)) {
+                  continue;
+                }
+                if(v.class_name.startsWith('enm')) {
+                  excludeTypes.push(v.class_name);
+                }
+                else {
+                  tmp.add(v);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return tmp;
+  }
+
+  /**
    * @summary Значение допреквизита по имени или свойству
    * @param name {String|CchProperties} - имя параметра
    * @param [value] {Any} - если задано, устанавливает

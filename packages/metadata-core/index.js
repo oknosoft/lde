@@ -1,5 +1,5 @@
 /*!
- metadata-core v2.0.34-beta.3, built:2024-05-07
+ metadata-core v2.0.34-beta.3, built:2024-06-02
  © 2014-2022 Evgeniy Malyarov and the Oknosoft team http://www.oknosoft.ru
  metadata.js may be freely distributed under the MIT
  To obtain commercial license and technical support, contact info@oknosoft.ru
@@ -1367,6 +1367,57 @@ class DataObj extends BaseDataObj {
       }
     }
     return res;
+  }
+  _links(set, excludeTypes = []) {
+    const tmp = new Set();
+    const {fields, tabular_sections} = this._metadata();
+    const {_obj, _manager: {_owner}} = this;
+    _owner.$p;
+    if(this.empty() || this.is_new()){
+      return tmp;
+    }
+    for (const fld in fields) {
+      const {type} = fields[fld];
+      if (type.is_ref && _obj.hasOwnProperty(fld) && _obj[fld] && !utils$1.is_empty_guid(_obj[fld])) {
+        const v = this[fld];
+        if(v instanceof DataObj && !v.empty() && !set.has(v)) {
+          if(excludeTypes.includes(v.class_name)) {
+            continue;
+          }
+          if(v.class_name.startsWith('enm')) {
+            excludeTypes.push(v.class_name);
+          }
+          else {
+            tmp.add(v);
+          }
+        }
+      }
+    }
+    for(const ts in tabular_sections) {
+      if (_obj.hasOwnProperty(ts)) {
+        const {fields} = tabular_sections[ts];
+        for(const row of this[ts]) {
+          for(const fld in fields) {
+            const {type} = fields[fld];
+            if (type.is_ref) {
+              const v = row[fld];
+              if (v instanceof DataObj && !v.empty() && !set.has(v)) {
+                if(excludeTypes.includes(v.class_name)) {
+                  continue;
+                }
+                if(v.class_name.startsWith('enm')) {
+                  excludeTypes.push(v.class_name);
+                }
+                else {
+                  tmp.add(v);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return tmp;
   }
   _extra(property, value, list) {
     const {extra_fields, _manager: {_owner}} = this;
@@ -4913,6 +4964,22 @@ class Meta extends MetaEventEmitter {
       name = 'Отчет.';
     }
     return name + this.syns_1с(pn[1]);
+  }
+  links({objs, set, excludeTypes = []}) {
+    if(!set) {
+      set = new Set();
+    }
+    if(Array.isArray(objs)) {
+      objs = new Set(objs);
+    }
+    for(const o of objs) {
+      if(!set.has(o)) {
+        set.add(o);
+        const tmp = o._links(set, excludeTypes);
+        this.links({objs: tmp, set, excludeTypes});
+      }
+    }
+    return set;
   }
 }
 Meta._sys = [{

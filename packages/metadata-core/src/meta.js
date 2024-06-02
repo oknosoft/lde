@@ -564,6 +564,30 @@ class Meta extends MetaEventEmitter {
 
   }
 
+  /**
+   * @summary Возвращает связанные ссылки глубоким перебором
+   * @desc За исключением типов, перечисленных в `excludeTypes`
+   * @param {Array|Set.<DataObj>} objs
+   * @param {Set.<DataObj>} [set]
+   * @param {Array.<String>} [excludeTypes]
+   * @return {Set}
+   */
+  links({objs, set, excludeTypes = []}) {
+    if(!set) {
+      set = new Set();
+    }
+    if(Array.isArray(objs)) {
+      objs = new Set(objs);
+    }
+    for(const o of objs) {
+      if(!set.has(o)) {
+        set.add(o);
+        const tmp = o._links(set, excludeTypes);
+        this.links({objs: tmp, set, excludeTypes});
+      }
+    }
+    return set;
+  }
 }
 
 /**
