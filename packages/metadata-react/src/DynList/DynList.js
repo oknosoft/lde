@@ -227,6 +227,7 @@ export class DynList extends MDNRComponent {
           scheme.append_selection(selector2);
 
           for(const cond of selector2.selector.$and) {
+            let skip;
             for(const fld in cond) {
               if(['class_name','search'].includes(fld)) {
                 continue;
@@ -248,10 +249,16 @@ export class DynList extends MDNRComponent {
 
               for(const ct in cond[fld]) {
                 if(['$in','$inh','$nin','$nin'].includes(ct) && typeof cond[fld][ct] === 'string') {
+                  if(!cond[fld][ct]) {
+                    skip = true;
+                    continue;
+                  }
                   cond[fld][ct] = cond[fld][ct].split(',');
                 }
               }
-              Object.assign(selector, cond);
+              if(!skip) {
+                Object.assign(selector, cond);
+              }
             }
           }
         }
@@ -383,6 +390,10 @@ export class DynList extends MDNRComponent {
               throw new Error(`${res.statusText}: ${text}`);
             });
         }
+      })
+      .catch((err) => {
+        console.error(err);
+        return {docs: []};
       })
       .then((data) => {
         data.docs.forEach((doc) => {
