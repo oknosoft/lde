@@ -11,7 +11,7 @@ import camelcase from 'camelcase';
 import {own, alias, pascal} from './meta/symbols';
 const string = 'string';
 
-class Iterator {
+export class Iterator {
 
   constructor(alatable) {
     this.alatable = alatable;

@@ -285,7 +285,7 @@ export class BaseDataObj extends OwnerObj {
         else {
           let mgr = v?._manager || this._manager.value_mgr(obj, f, mf, false, v).mgr;
           if(mgr) {
-            if(mgr.isEnum()) {
+            if(mgr.isEnum) {
               if(typeof v === string) {
                 obj[f] = v;
               }
