@@ -145,25 +145,24 @@ export class TabularSection extends Array {
 	 * @param [callback] {Function} - в который передается строка табчасти на каждой итерации
 	 * @return {Array}
 	 */
-	find_rows(selection, callback) {
+	findRows(selection, callback) {
 
 		// поддержка индекса
-		let {_obj, _owner, _name, _index} = this;
-		const {index} = _owner._metadata(_name);
+		const {index, root} = this.#meta;
 		if(index && selection.hasOwnProperty(index)) {
-		  if(!_index) {
-        _index = this._index = new Map();
-      }
-      _obj = _index.get(selection[index]);
-		  if(!_obj) {
-		    _obj = this._obj.filter((row) => row[index] == selection[index]);
-        _index.set(selection[index], _obj);
-      }
-		  selection = Object.assign({}, selection);
-		  delete selection[index];
+		  // if(!_index) {
+      //   _index = this._index = new Map();
+      // }
+      // _obj = _index.get(selection[index]);
+		  // if(!_obj) {
+		  //   _obj = this._obj.filter((row) => row[index] == selection[index]);
+      //   _index.set(selection[index], _obj);
+      // }
+		  // selection = Object.assign({}, selection);
+		  // delete selection[index];
     }
 
-		return this[own]._manager.utils.find.rows(this, selection, callback);
+		return root.utils.find.rows(this, selection, callback);
 	}
 
 	/**

@@ -313,7 +313,7 @@ class MetaUtils extends OwnerObj {
        * @param v {*} - проверяемое значение
        * @return {Boolean} - true, если v эквивалентен пустому guid
        */
-      emptyGuid: (v) => !v || v === this.blank.guid,
+      emptyGuid: (v) => !v || v == this.blank.guid,
 
       /**
        * Проверяет, является ли значенние Data-объектным типом
