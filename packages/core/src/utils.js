@@ -337,9 +337,7 @@ class MetaUtils extends OwnerObj {
        * @param v {*} - проверяемое значение
        * @return {Boolean} - true, если значение является менеджером данных
        */
-      dataMgr(v) {
-        return v instanceof this.classes.DataManager;
-      },
+      dataMgr: (v)=> v instanceof this.classes.DataManager,
 
       /**
        * Проверяет, является ли значенние менеджером перечисления
@@ -347,9 +345,7 @@ class MetaUtils extends OwnerObj {
        * @param v {*} - проверяемое значение
        * @return {Boolean} - true, если значение является менеджером данных
        */
-      enmMgr(v) {
-        return v instanceof this.classes.EnumManager;
-      },
+      enmMgr: (v) => v instanceof this.classes.EnumManager,
 
       /**
        * Проверяет, является ли значенние табличной частью или строкой табличной части
@@ -357,7 +353,7 @@ class MetaUtils extends OwnerObj {
        * @param v {*} - проверяемое значение
        * @return {Boolean} - true, если значение является табличной частью
        */
-      tabular(v) {
+      tabular: (v) => {
         const {classes} = this;
         return v instanceof classes.TabularSectionRow || v instanceof classes.TabularSection;
       },
