@@ -220,6 +220,7 @@ export class MetaObj extends OwnerObj {
     // табличные части по метаданным - устанавливаем геттер табличной части
     for (const ts in this.tabulars) {
       text += `get ${ts}(){return this[get]('${ts}')}\n`;
+      text += `set ${ts}(v){this[get]('${ts}').load(v)}\n`;
     }
     text +=`};\nclasses.${fnName} = ${fnName};\n`;
 

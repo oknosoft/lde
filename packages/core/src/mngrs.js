@@ -484,6 +484,7 @@ export class RefDataManager extends DataManager {
     const {jobPrm} = this.root;
     const {grouping, tabulars} = this.metadata();
 		for(const attr of aattr){
+      let skipMixin;
 		  if(grouping === 'array' && attr.ref.length <= 3) {
 		    res.push.apply(res, this.load(attr.rows, forse));
 		    continue;
@@ -495,6 +496,7 @@ export class RefDataManager extends DataManager {
 				}
 				obj = this.objConstructor('', [attr, this, true]);
 				obj.isNew() && obj._loaded();
+        skipMixin = true;
 			}
 			else if(obj.isNew() || forse){
 			  if(obj.isNew() || forse !== 'update_only') {
@@ -508,7 +510,7 @@ export class RefDataManager extends DataManager {
             }
           }
         }
-        this.utils.mixin(obj, attr, null, ['ref']);
+        !skipMixin && this.utils.mixin(obj, attr, null, ['ref']);
         attr._rev && (obj._rev = attr._rev);
 			}
       for(const ts in tabulars) {
