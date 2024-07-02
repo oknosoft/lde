@@ -992,7 +992,7 @@ const utils = {
 					const is_obj = sel && typeof(sel) === 'object';
 
 					// пропускаем служебные свойства
-					if (j.substr(0, 1) == '_') {
+					if (j.substring(0, 1) == '_') {
             if(j === '_search' && sel.fields && sel.value) {
               ok = sel.value.every((str) => sel.fields.some((fld) => utils._like(o[fld], str)));
               if(!ok) {

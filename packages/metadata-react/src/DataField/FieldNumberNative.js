@@ -69,7 +69,7 @@ function FieldNumberNative(props) {
   const onKeyUp = ({key}) => {
     if(key === 'Enter' || key === 'Tab') {
       const v = parseFloat(value || 0);
-      if(!isNaN(v) && _obj[_fld] != v) {
+      if(!read_only && !isNaN(v) && _obj[_fld] != v) {
         _obj[_fld] = v;
         handleValueChange?.(_obj[_fld]);
       }

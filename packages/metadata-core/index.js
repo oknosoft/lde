@@ -1,5 +1,5 @@
 /*!
- metadata-core v2.0.34-beta.3, built:2024-06-02
+ metadata-core v2.0.34-beta.3, built:2024-07-02
  © 2014-2022 Evgeniy Malyarov and the Oknosoft team http://www.oknosoft.ru
  metadata.js may be freely distributed under the MIT
  To obtain commercial license and technical support, contact info@oknosoft.ru
@@ -3891,7 +3891,7 @@ const utils = {
 				for (let j in selection) {
 					const sel = selection[j];
 					const is_obj = sel && typeof(sel) === 'object';
-					if (j.substr(0, 1) == '_') {
+					if (j.substring(0, 1) == '_') {
             if(j === '_search' && sel.fields && sel.value) {
               ok = sel.value.every((str) => sel.fields.some((fld) => utils._like(o[fld], str)));
               if(!ok) {
