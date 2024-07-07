@@ -97,6 +97,11 @@ export default class JobPrm extends OwnerObj {
     return localStorage;
   }
 
+  // расположение couchdb для браузера
+  get couchPath() {
+    return this.isNode ? (this.couch_local || this.couchLocal) : `/couchdb/${this.lsPrefix}`;
+  }
+
   /**
    * Устанавливает параметр в user_params и localStorage
    *

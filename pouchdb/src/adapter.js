@@ -121,6 +121,8 @@ function adapter({AbstracrAdapter}, {own}) {
     constructor(owner) {
       super(owner);
       attachments(this);
+      Object.defineProperty(this, 'local', {value: {}, enumerable: true});
+      Object.defineProperty(this, 'remote', {value: {}, enumerable: true});
     }
 
     get props() {
@@ -132,6 +134,17 @@ function adapter({AbstracrAdapter}, {own}) {
      * @param {Object} attr
      */
     async init(attr) {
+      if(this.props.idb) {
+        let res = Promise.resolve();
+        for(const name of this[own].md.bases) {
+          if(['ram', 'doc'].includes(name)) {
+            Object.defineProperty(this.local, name, {
+              value: new PouchDB(name, {adapter: 'indexeddb', revs_limit: 20})
+            });
+            res = res.then(() => this.local[name].info());
+          }
+        }
+      }
 
     }
 
