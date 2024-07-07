@@ -11,7 +11,7 @@
   "dependencies": {
     "camelcase": "^8.0",
     "dayjs": "^1.11",
-    "uuid": "^9.0"
+    "uuid": "^10.0"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "url": "https://github.com/oknosoft/metadata.js/issues"
   },
   "homepage": "https://oknosoft.ru/metadata/",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "keywords": [
     "metadata",
     "browser data engine",

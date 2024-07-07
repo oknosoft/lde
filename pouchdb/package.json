@@ -25,7 +25,7 @@
     "url": "https://github.com/oknosoft/metadata.js/issues"
   },
   "homepage": "https://oknosoft.ru/metadata/",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "keywords": [
     "metadata",
     "couchdb",

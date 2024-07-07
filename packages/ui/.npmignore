@@ -1,8 +1,0 @@
-.DS_Store
-/node_modules
-/src/
-/build.js
-/babel.config.js
-/copy-files.js
-*.log
-*.lock

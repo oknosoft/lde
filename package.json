@@ -16,15 +16,6 @@
     "uuid": "^10.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.24",
-    "@babel/preset-env": "^7.24",
-    "@babel/preset-react": "^7.24",
-    "@rollup/plugin-node-resolve": "^15.2",
-    "@rollup/plugin-replace": "^5.0",
-    "babel-loader": "^9.1",
-    "lerna": "^8.1",
-    "react": "^18.3",
-    "react-dom": "^18.3",
     "rollup": "^4.18",
     "rollup-plugin-cleanup": "^3.2",
     "typescript": "^5.5",
@@ -38,15 +29,19 @@
     "packages/*"
   ],
   "files": [
-    "packages/**",
+    "cli/**",
+    "core/**",
+    "designer/**",
+    "postgres/**",
+    "pouchdb/**",
     "LICENSE.md",
     "LICENSE.en.md"
   ],
   "scripts": {
     "dev": "webpack serve -c example/webpack.config.js",
-    "build:core": "node ./packages/core/build.js",
+    "build:core": "node core/build.js",
     "build:ui": "cd packages/ui/ && cross-env NODE_ENV=production BABEL_ENV=es babel --config-file ./babel.config.js ./src --out-dir . && node ./copy-files && cd ../../ && node packages/ui/build.js",
-    "build:pouchdb": "node ./packages/pouchdb/build.js",
+    "build:pouchdb": "node pouchdb/build.js",
     "build:docs": "yuidoc -c doc/yuidoc.json src"
   },
   "repository": {

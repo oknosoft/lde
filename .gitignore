@@ -21,9 +21,9 @@ node_modules
 .eslintcache
 
 # compiled
-/packages/core/dist/
-!/packages/core/package.json
-/packages/pouchdb/dist/
+/core/dist/
+!/core/package.json
+/pouchdb/dist/
 /packages/ui/dist/
 
 
