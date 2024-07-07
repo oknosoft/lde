@@ -1,7 +1,7 @@
 {
   "name": "@oknosoft/metadata",
   "description": "Library for building offline-first browser-based business applications",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "private": true,
   "author": "Evgeniy Malyarov <info@oknosoft.ru> (http://www.oknosoft.ru)",
   "license": "MIT",
@@ -13,22 +13,22 @@
   "dependencies": {
     "camelcase": "^8.0",
     "dayjs": "^1.11",
-    "uuid": "^9.0"
+    "uuid": "^10.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.23",
-    "@babel/preset-env": "^7.23",
-    "@babel/preset-react": "^7.23",
+    "@babel/core": "^7.24",
+    "@babel/preset-env": "^7.24",
+    "@babel/preset-react": "^7.24",
     "@rollup/plugin-node-resolve": "^15.2",
     "@rollup/plugin-replace": "^5.0",
     "babel-loader": "^9.1",
     "lerna": "^8.1",
-    "react": "^18.2",
-    "react-dom": "^18.2",
-    "rollup": "^4.10",
+    "react": "^18.3",
+    "react-dom": "^18.3",
+    "rollup": "^4.18",
     "rollup-plugin-cleanup": "^3.2",
-    "typescript": "^5.3",
-    "webpack": "^5.90",
+    "typescript": "^5.5",
+    "webpack": "^5.92",
     "webpack-cli": "^5.1",
     "webpack-dev-server": "^5.0"
   },
