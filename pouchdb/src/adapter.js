@@ -130,7 +130,8 @@ function adapter({AbstracrAdapter}, {own}) {
     }
 
     /**
-     * Инициализация после авторизации
+     * @summary Инициализация после авторизации
+     * @desc Или на старте приложения, если включён автономный режим
      * @param {Object} attr
      */
     async init(attr) {
@@ -144,10 +145,27 @@ function adapter({AbstracrAdapter}, {own}) {
             res = res.then(() => this.local[name].info());
           }
         }
+        return res;
       }
-
     }
 
+    loadRam() {
+      const {md} = this[own];
+      return this.local.ram.allDocs({include_docs: true, limit: 1e6})
+        .then(({rows}) => {
+          for(const {doc} of rows) {
+            const [id, ref] = doc._id.split('|');
+            if(id && ref) {
+              const mgr = md.mgr(id);
+              if(mgr) {
+                delete doc._id;
+                doc.ref = ref;
+                mgr.create(doc);
+              }
+            }
+          }
+        });
+    }
 
 
   };

@@ -4,8 +4,8 @@
  */
 
 import {string} from './utils';
-import {own, get, set, hash, notify} from './meta/symbols';
-import {OwnerObj, TypeDef} from './meta/metaObjs';
+import {own, get, set, hash, notify, mf} from './meta/symbols';
+import {OwnerObj, TypeDef, MetaField} from './meta/metaObjs';
 import {TabularSection} from './tabulars';
 
 class InnerData {
@@ -109,6 +109,29 @@ export class BaseDataObj extends OwnerObj {
    * @return {MetaObj}
    */
   _metadata(name) {
+    const common = this._manager.metadata(name);
+    if(common.choiceType) {
+      let local = this._raw(mf);
+      if(!local) {
+        local = {};
+        this._raw({[mf]: local});
+      }
+      const {path, elm} = common.choiceType;
+      if(elm !== 0) {
+        throw new Error(`metadata choiceType elm !== 0 (${elm})`);
+      }
+      let fld = path[elm];
+      if(fld === 'ТипЗначения') {
+        fld = 'type';
+      }
+      const type = this[fld];
+      const {ref, name: synonym} = this;
+      if(!local[ref]) {
+        const {type: fake, choiceType, ...other} = common;
+        local[ref] = new MetaField(common[own], name, {[name]: {...other, synonym, type}});
+      }
+      return local[ref];
+    }
     return this._manager.metadata(name);
   }
 
@@ -125,11 +148,21 @@ export class BaseDataObj extends OwnerObj {
   }
 
   /**
-   * Дополняет сырые данные #obj не генерируя событий
-   * @param {Object} raw
+   * @summary Работа с сырыми данными
+   * @desc Дополняет или читает сырые данные #obj не генерируя событий
+   * @param {String|Object|Array} raw
    */
-  _assign(raw) {
-    Object.assign(this.#obj, raw);
+  _raw(raw) {
+    const type = typeof raw;
+    if(type === 'Object') {
+      Object.assign(this.#obj, raw);
+    }
+    else if(['string', 'symbol'].includes(type)) {
+      return this.#obj[raw];
+    }
+    else if(Array.isArray(raw)) {
+      return raw.map(name => this.#obj[name]);
+    }
   }
 
   [get](f) {
@@ -425,6 +458,13 @@ export class BaseDataObj extends OwnerObj {
     return this.presentation;
   }
 
+  /**
+   * Возвращает "истина" для нового (еще не записанного или не прочитанного) объекта
+   * @return {Boolean}
+   */
+  isNew() {
+    return !this._data || this._data.isNew;
+  }
 
   /**
    * Пометка удаления
@@ -447,14 +487,6 @@ export class BaseDataObj extends OwnerObj {
   }
   set _modified(v) {
     this._data.modified = !!v;
-  }
-
-  /**
-   * Возвращает "истина" для нового (еще не записанного или не прочитанного) объекта
-   * @return {Boolean}
-   */
-  isNew() {
-    return !this._data || this._data.isNew;
   }
 
   /**
@@ -1294,6 +1326,10 @@ export class DocObj extends DataObj {
 
 }
 
+export class CchObj extends CatObj {
+
+}
+
 
 /**
  * @summary Абстрактный класс ОбработкаОбъект
@@ -1333,7 +1369,7 @@ export class EnumObj extends DataObj {
     super(other, manager, loading, true);
     // дозаполняем при необходисомти
     if(!loading) {
-      super._assign(other);
+      super._raw(other);
     }
   }
 

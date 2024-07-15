@@ -253,7 +253,7 @@ export class MetaField extends OwnerObj {
   constructor(owner, name, fields) {
     super(owner, name);
     const {type, ...other} = fields[name];
-    this.type = new TypeDef(type);
+    this.type = type instanceof TypeDef ? type : new TypeDef(type);
     Object.assign(this, other);
   }
 
