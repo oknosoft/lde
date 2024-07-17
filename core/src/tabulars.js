@@ -68,6 +68,9 @@ export class TabularSection extends Array {
     return this.#meta.get(name);
   }
 
+  count() {
+    return this.length;
+  }
 
 	/**
 	 * @summary Очищает табличную часть
@@ -128,13 +131,26 @@ export class TabularSection extends Array {
 	/**
 	 * Находит первую строку, содержащую значение
 	 * @param val {*} - значение для поиска
-	 * @param columns {String|Array} - колонки, в которых искать
+	 * @param [columns] {String|Array} - колонки, в которых искать
 	 * @return {TabularSectionRow}
 	 */
 	find(val, columns) {
-		const res = this[own]._manager.utils.find(this._obj, val, columns);
+    if(typeof val === 'function') {
+      return this.filter(val);
+    }
+		const res = this[own]._manager.utils.find(this, val, columns);
 		return res && res._row;
 	}
+
+  filter(filterFunc) {
+    const res = [];
+    for(const row of this) {
+      if(filterFunc(row)) {
+        res.push(row);
+      }
+    }
+    return res;
+  }
 
 	/**
 	 * Находит строки, соответствующие отбору

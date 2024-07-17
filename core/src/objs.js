@@ -188,11 +188,24 @@ export class BaseDataObj extends OwnerObj {
     }
 
     // для дальнейшего разбора, потребуется тип значения
+    const {utils} = this._manager;
     const rtype = typeof res;
     // если доступны ссылочные и на входе строка
     if(type.isRef && rtype === string) {
       const parts = res.split('|');
-      if(parts.length === 2) {
+      if(parts.length === 1 && utils.is.guid(res) && !utils.is.emptyGuid(res)) {
+        for(const test of type.types) {
+          if(test.includes('.')) {
+            const mgr = fMeta[own].mgr(test);
+            const o = mgr.byRef(res);
+            if(o) {
+              this.#obj[f] = `${mgr.metadata().id}|${res}`;
+              return o;
+            }
+          }
+        }
+      }
+      else if(parts.length === 2) {
         const mgr = fMeta[own].mgr(parts[0]);
         if(mgr) {
           return mgr.get(parts[1]);
@@ -210,7 +223,7 @@ export class BaseDataObj extends OwnerObj {
       return res;
     }
 
-    const {utils} = this._manager;
+
 
     if(type.isRef) {
 
