@@ -70,16 +70,6 @@ export class DataManager extends MetaEventEmitter{
   #alatable = [];
 
   /**
-   * Индекс по коду-дате-номеру
-   * @type Object
-   */
-  #index = {
-    predefined: {},
-    id: {},
-    year: {},
-  };
-
-  /**
    * Указатель на метаданные текущего менеджера
    * @type MetaObj
    */
@@ -94,6 +84,16 @@ export class DataManager extends MetaEventEmitter{
 	constructor(owner, className) {
 
 		super(owner);
+
+    /**
+     * Индекс по коду-дате-номеру
+     * @type Object
+     */
+    this.index = {
+      predefined: {},
+      id: {},
+      year: {},
+    };
 
 		/**
 		 * Имя типа объектов этого менеджера
@@ -174,11 +174,11 @@ export class DataManager extends MetaEventEmitter{
    * @return {DataObj}
    */
   byId(id) {
-    let o = this.#index.id[id];
+    let o = this.index.id[id];
     if(!o) {
-      this.find_rows({id}, obj => {
+      this.findRows({id}, obj => {
         o = obj;
-        this.#index.id[id] = o;
+        this.index.id[id] = o;
         return false;
       });
     }
@@ -216,7 +216,7 @@ export class DataManager extends MetaEventEmitter{
    * @return {DataObj}
    */
   predefined(name) {
-    return this.#index.predefined[name];
+    return this.index.predefined[name];
   }
 
 	/**
@@ -385,11 +385,11 @@ export class DataManager extends MetaEventEmitter{
     if(ind >= 0) {
       this.#alatable.splice(ind, 1);
     }
-    if(id && this.#index.id[id]) {
-      delete this.#index.id[id];
+    if(id && this.index.id[id]) {
+      delete this.index.id[id];
     }
     else if(date && numberDoc) {
-      const by_id = this.#index.year[this.utils.moment(date).format('YYYYMM')];
+      const by_id = this.index.year[this.utils.moment(date).format('YYYYMM')];
       if(by_id[numberDoc]) {
         delete by_id[numberDoc];
       }

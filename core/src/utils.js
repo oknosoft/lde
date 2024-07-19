@@ -814,6 +814,20 @@ class MetaUtils extends OwnerObj {
     return debounced;
   }
 
+  deepFreeze(obj) {
+    // Retrieve the property names defined on object
+    const propNames = Reflect.ownKeys(obj);
+    // Freeze properties before freezing self
+    for (const name of propNames) {
+      const value = obj[name];
+      if ((value && typeof value === object && !this.is.dataObj(value)) || typeof value === "function") {
+        this.deepFreeze(value);
+      }
+    }
+
+    return Object.freeze(obj);
+  }
+
   /**
    * Возвращает функцию для сортировки массива объектов по полю fld
    * @param fld {String}
