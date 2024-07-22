@@ -198,6 +198,7 @@ export class MetaObj extends OwnerObj {
     //     this.#m.doc[i].printing_plates = pp.doc[i];
     //   }
     // }
+    return {};
   }
 
   constructorBase() {

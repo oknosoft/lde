@@ -329,7 +329,7 @@ class MetaUtils extends OwnerObj {
        * @param v {*} - проверяемое значение
        * @return {Boolean} - true, если значение является ссылкой
        */
-      docObj: (v) => v instanceof this.classes.DataObj,
+      docObj: (v) => v instanceof this.classes.DocObj,
 
       /**
        * Проверяет, является ли значенние менеджером объектов данных
