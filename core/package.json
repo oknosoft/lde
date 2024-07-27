@@ -9,9 +9,8 @@
     "yarn": "^1.22"
   },
   "dependencies": {
-    "camelcase": "^8.0",
+    "change-case": "^5.4",
     "dayjs": "^1.11",
-    "snake-case": "^4.0",
     "uuid": "^10.0"
   },
   "repository": {

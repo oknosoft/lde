@@ -11,7 +11,7 @@
   },
   "packageManager": "yarn@1.22.22",
   "dependencies": {
-    "camelcase": "^8.0",
+    "change-case": "^5.4",
     "dayjs": "^1.11",
     "pouchdb-adapter-http": "^9.0",
     "pouchdb-adapter-indexeddb": "^9.0",
@@ -20,7 +20,6 @@
     "pouchdb-find": "^9.0",
     "pouchdb-mapreduce": "^9.0",
     "pouchdb-replication": "^9.0",
-    "snake-case": "^4.0",
     "uuid": "^10.0"
   },
   "devDependencies": {

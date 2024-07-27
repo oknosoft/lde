@@ -9,7 +9,7 @@ const webpack = require('webpack');
 const path = require('path');
 const package_data = require(path.resolve(__dirname, './package.json'));
 
-const external = ['events', 'moment', 'dayjs', 'camelcase'];
+const external = ['events', 'moment', 'dayjs', 'change-case'];
 const plugins = [
   nodeResolve({preferBuiltins: true}),
 	replace({PACKAGE_VERSION: `"${package_data.version}"`}),

@@ -6,9 +6,9 @@
 
 import msg from './i18n.ru';
 import MetaEventEmitter from './meta/emitter';
-import camelcase from 'camelcase';
+import {pascalCase} from 'change-case';
 
-import {own, alias, pascal} from './meta/symbols';
+import {own, alias} from './meta/symbols';
 const string = 'string';
 
 export class Iterator {
@@ -276,8 +276,8 @@ export class DataManager extends MetaEventEmitter{
 	objConstructor(tsName = '', mode) {
 
 		if(!this.#constructors[tsName]){
-			const fnName = camelcase(this.className, pascal);
-			this.#constructors[tsName] = tsName ? `${fnName}${camelcase(tsName, pascal)}Row` : fnName;
+			const fnName = pascalCase(this.className);
+			this.#constructors[tsName] = tsName ? `${fnName}${pascalCase(tsName)}Row` : fnName;
 		}
 
 		tsName = this.#constructors[tsName];
@@ -308,8 +308,8 @@ export class DataManager extends MetaEventEmitter{
    * @return {String}
    */
   static objConstructor(className, tsName = '') {
-    const fnName = camelcase(className, pascal);
-    return tsName ? `${fnName}${camelcase(tsName, pascal)}Row` : fnName;
+    const fnName = pascalCase(className);
+    return tsName ? `${fnName}${pascalCase(tsName)}Row` : fnName;
   }
 
 	/**

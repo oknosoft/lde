@@ -1,7 +1,7 @@
 
-import {own, alias, get, set, pascal} from './symbols';
+import {own, alias, get, set} from './symbols';
 import {enmFields} from '../system'
-import camelcase from 'camelcase';
+import {camelCase, pascalCase} from 'change-case';
 
 /**
  * Абстрактный класс со ссылкой на владельца
@@ -378,7 +378,7 @@ export class MetaTabular extends OwnerObj {
 export class TypeDef {
   constructor({date_part, str_len, str_fix, ...def}) {
     if(date_part) {
-      def.datePart = camelcase(date_part, pascal);
+      def.datePart = pascalCase(date_part);
     }
     if(str_len) {
       def.strLen = true;
@@ -444,7 +444,7 @@ export class TypeDef {
       }
       const parts = name.split('.');
       if(parts.length === 2) {
-        if(type === `${parts[0]}.${camelcase(parts[1])}`) {
+        if(type === `${parts[0]}.${parts[1]}` || type === `${parts[0]}.${camelCase(parts[1])}`) {
           return true;
         }
       }
