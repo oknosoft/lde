@@ -43,7 +43,7 @@ export default {
         tooltip: 'Путь к данным',
         type: {
           types: ['string'],
-          str_len: 1024
+          str_len: 0
         }
       },
       left_value_type: {
@@ -68,7 +68,7 @@ export default {
         tooltip: 'Значение или путь',
         type: {
           types: ['string'],
-          str_len: 1024
+          str_len: 0
         }
       },
       right_value_type: {
@@ -830,7 +830,24 @@ export default {
               name: 'selection',
               synonym: 'Отбор',
               tooltip: '',
-              fields: scheme_settings_selection_fields,
+              fields: {
+                ...scheme_settings_selection_fields,
+                quick: {
+                  synonym: 'Быстрый выбор',
+                  tooltip: 'Включать в панель быстрого выбора',
+                  type: {types: ['boolean']}
+                },
+                list: {
+                  synonym: 'Дискретный ряд',
+                  tooltip: 'Список выбора',
+                  type: {types: ['string'], str_len: 0}
+                },
+                caption: {
+                  synonym: 'Заголовок',
+                  tooltip: 'Заголовок в панели быстрого выбора',
+                  type: {types: ['string'], str_len: 75}
+                },
+              },
             },
             params: {
               name: 'params',

@@ -18,7 +18,7 @@ const plugins = [
 ];
 const header = `/*!
  ${package_data.name} v${package_data.version}, built:${new Date().toJSON().split('T')[0]}
- © 2014-2022 Evgeniy Malyarov and the Oknosoft team http://www.oknosoft.ru
+ © 2014-2024 Evgeniy Malyarov and the Oknosoft team http://www.oknosoft.ru
  metadata.js may be freely distributed under the MIT
  To obtain commercial license and technical support, contact info@oknosoft.ru
  */\n`;

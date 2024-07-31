@@ -1,7 +1,7 @@
 /**
  * Содержит методы и подписки на события Postgres
  *
- * &copy; Evgeniy Malyarov http://www.oknosoft.ru 2014-2022
+ * &copy; Evgeniy Malyarov http://www.oknosoft.ru 2014-2024
  * @module common
  * @submodule postgres
  */
