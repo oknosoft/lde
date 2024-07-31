@@ -174,15 +174,11 @@ export class DataManager extends MetaEventEmitter{
    * @return {DataObj}
    */
   byId(id) {
-    let o = this.index.id[id];
-    if(!o) {
-      this.findRows({id}, obj => {
-        o = obj;
-        this.index.id[id] = o;
-        return false;
-      });
+    const {index} = this;
+    if(!index.id[id]) {
+      index.id[id] = this.find({id});
     }
-    return o;
+    return index.id[id];
   }
 
   /**
