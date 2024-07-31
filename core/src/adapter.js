@@ -25,10 +25,12 @@ const auth = {
       const zone = sessionStorage.getItem('zone');
       if(zone) {
         //url = url.replace(/_\d\d_/, `_${zone}_`);
+        const branch = sessionStorage.getItem('branch');
+        const impersonation = sessionStorage.getItem('impersonation');
         opts.headers.set('zone', zone);
-        opts.headers.set('branch', sessionStorage.getItem('branch'));
-        opts.headers.set('impersonation', sessionStorage.getItem('impersonation'));
-        opts.headers.set('year', sessionStorage.getItem('year'));
+        opts.headers.set('year', sessionStorage.getItem('year') || new Date().getFullYear());
+        branch && opts.headers.set('branch', branch);
+        impersonation && opts.headers.set('impersonation', impersonation);
       }
     }
 
