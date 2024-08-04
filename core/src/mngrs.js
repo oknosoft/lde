@@ -283,7 +283,8 @@ export class DataManager extends MetaEventEmitter{
 			return tsName;
 		}
 		// если булево - возвращаем саму функцию - конструктор
-		const constructor = this.root.classes[tsName];
+    const {utils, classes} = this.root;
+		const constructor = classes[tsName] || (utils.is.enmMgr(this) ? classes.EnumObj : null);
 		if(mode === true ){
 			return constructor;
 		}
@@ -713,8 +714,7 @@ export class EnumManager extends RefDataManager{
     }
     if(!this[ref]) {
       if(ref === "_" || create) {
-        const {EnumObj} = this.root.classes;
-        const value = new EnumObj({ref, order: 0, synonym: ''}, this, true);
+        const value = this.objConstructor('', [{ref, order: 0, synonym: ''}, this]);
         Object.defineProperty(this, ref, {value});
       }
     }

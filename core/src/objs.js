@@ -154,7 +154,7 @@ export class BaseDataObj extends OwnerObj {
    */
   _raw(raw) {
     const type = typeof raw;
-    if(type === 'Object') {
+    if(type === 'object') {
       Object.assign(this.#obj, raw);
     }
     else if(['string', 'symbol'].includes(type)) {
