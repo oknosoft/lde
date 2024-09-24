@@ -86,10 +86,8 @@ export default ($p) => {
 			},
 
 			by_type = function (fv) {
-
 				ft = _md.control_by_type(mf.type, fv);
 				txt_by_type(fv, mf);
-
 			},
 
 			add_xml_row = function (f, tabular) {
@@ -189,8 +187,14 @@ export default ($p) => {
 						const index = destinations_extra_fields.indexOf(row[pname]);
             index != -1 && destinations_extra_fields.splice(index, 1);
 					});
-					destinations_extra_fields.forEach((property) => o[extra_fields.ts].add()[pname] = property);
-				};
+          for(const property of destinations_extra_fields) {
+            const nrow = o[extra_fields.ts].add();
+            nrow[pname] = property;
+            if(property._obj.by_default) {
+              nrow.value = property._obj.by_default.value;
+            }
+          }
+				}
 
 				// Добавляем строки в oxml с учетом отбора, который мог быть задан в extra_fields.selection
 				o[extra_fields.ts].find_rows(extra_fields.selection, (row) => add_xml_row(row, extra_fields.ts));
@@ -2494,9 +2498,9 @@ dhtmlXCellObject.prototype.attachTabular = function(attr) {
 	    return true;
     }
 
-    let res;
+    var res;
     _source.fields.some(function (fld) {
-      let v = row._row[fld];
+      var v = row._row[fld];
       if($p.utils.is_data_obj(v)){
         if(!v.is_new() && v.presentation.match(_input_filter)){
           return res = true;
@@ -2506,12 +2510,12 @@ dhtmlXCellObject.prototype.attachTabular = function(attr) {
         return res = v.toLocaleString().match(_input_filter);
       }
       else if(v instanceof Date){
-        return res = v.toJSON().match(_input_filter);
+        return res = $p.moment(v).format($p.moment._masks.date_time).match(_input_filter);
       }
-      else if(v?.match){
+      else if(v.match){
         return res = v.match(_input_filter);
       }
-    });
+    })
     return res;
   }
 
@@ -3890,66 +3894,10 @@ DataManager.prototype.form_obj = function(pwnd, attr){
           title: 'Документ изменён',
         });
       });
+
+
 		}
-    handleAddLink();
 	}
-
-  function handleAddLink() {
-
-    if(!event?.altKey && !event?.ctrlKey && !event?.shiftKey) {
-      return;
-    }
-
-    if(!o || o._modified || o.is_new()) {
-      $p.msg.show_msg({
-        type: 'alert-warning',
-        text: 'Перед добавлением вложения, выполните команду "Записать"',
-        title: 'Документ изменён',
-      });
-      return;
-    }
-
-    const {ui: {dialogs}, msg}  = $p;
-    
-    wnd.elmnts.vault_pop.hide();
-    wnd.elmnts.vault.unload();
-    wnd.elmnts.vault = null;
-    wnd.progressOn();
-
-    dialogs.input_value({
-      title: 'Расположение объекта',
-      text: 'Укажите url ресурса',
-      type: 'string',
-      initialValue: '',
-    })
-      .then((url) => {
-        return dialogs.input_value({
-          title: 'Название объекта',
-          text: 'Наименование ссылки',
-          type: 'string',
-          initialValue: 'Новая ссылка',
-        })
-          .then((name) => {
-            const type = 'application/internet-shortcut';
-            const data = new Blob([`[InternetShortcut]\nURL=${url}`], {type});
-            if(!name.endsWith('.url')) {
-              name += '.url';
-            }
-            return o.save_attachment(name, data, type);
-          });
-      })
-      .then(() => o.load())
-      .catch((err) => {
-        // показываем диалог
-        // this.setState({dialog: {
-        //     title: msg.file_download,
-        //     message: err.message,
-        //   }});
-      })
-      .then(() => wnd.progressOff());
-
-    return true;
-  }
 
 
 	/**

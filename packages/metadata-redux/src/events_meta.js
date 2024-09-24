@@ -70,8 +70,9 @@ export default function metaMiddleware({adapters, md, job_prm}) {
         });
 
         // события window
-        job_prm.idle = new Idle(dispatch, job_prm.idle_timeout);
-
+        if(job_prm.idle_timeout) {
+          job_prm.idle = new Idle(dispatch, job_prm.idle_timeout);
+        }
 
       }
       return next(action);

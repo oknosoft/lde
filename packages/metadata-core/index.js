@@ -1,5 +1,5 @@
 /*!
- metadata-core v2.0.35-beta.1, built:2024-07-30
+ metadata-core v2.0.35-beta.1, built:2024-09-24
  © 2014-2024 Evgeniy Malyarov and the Oknosoft team http://www.oknosoft.ru
  metadata.js may be freely distributed under the MIT
  To obtain commercial license and technical support, contact info@oknosoft.ru
@@ -1597,6 +1597,29 @@ class DocObj extends NumberDocAndDate(DataObj) {
   set posted(v) {
     this.__notify('posted');
     this._obj.posted = utils$1.fix_boolean(v);
+  }
+  get deferredProcessing() {
+    return this._obj.deferredProcessing || {};
+  }
+  set deferredProcessing(v) {
+    if(typeof v !== 'object') {
+      throw new Error('deferredProcessing value must be object type');
+    }
+    const {_obj} = this;
+    if(!_obj.deferredProcessing) {
+      _obj.deferredProcessing = {};
+    }
+    for(const fld in v) {
+      if(v[fld] === undefined) {
+        delete _obj.deferredProcessing[fld];
+      }
+      else {
+        _obj.deferredProcessing[fld] = v[fld];
+      }
+    }
+    if(!Object.keys(_obj.deferredProcessing).length) {
+      delete _obj.deferredProcessing;
+    }
   }
 }
 class DataProcessorObj extends DataObj {

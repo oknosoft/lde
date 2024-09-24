@@ -1487,7 +1487,6 @@ export class DocObj extends NumberDocAndDate(DataObj) {
       :
       `${meta.obj_presentation || meta.synonym} ${moment(date).format(moment._masks.date_time)} (${posted ? '' : 'не '}проведен)${_modified ? ' *' : ''}`;
   }
-
   set presentation(v) {
     if(v) {
       this._presentation = String(v);
@@ -1496,16 +1495,41 @@ export class DocObj extends NumberDocAndDate(DataObj) {
 
   /**
    * Признак проведения
-   * @property posted
    * @type {Boolean}
    */
   get posted() {
     return this._obj.posted || false;
   }
-
   set posted(v) {
     this.__notify('posted');
     this._obj.posted = utils.fix_boolean(v);
+  }
+
+  /**
+   * @summary Признаки отложенной обработки
+   */
+  get deferredProcessing() {
+    return this._obj.deferredProcessing || {};
+  }
+  set deferredProcessing(v) {
+    if(typeof v !== 'object') {
+      throw new Error('deferredProcessing value must be object type');
+    }
+    const {_obj} = this;
+    if(!_obj.deferredProcessing) {
+      _obj.deferredProcessing = {};
+    }
+    for(const fld in v) {
+      if(v[fld] === undefined) {
+        delete _obj.deferredProcessing[fld];
+      }
+      else {
+        _obj.deferredProcessing[fld] = v[fld];
+      }
+    }
+    if(!Object.keys(_obj.deferredProcessing).length) {
+      delete _obj.deferredProcessing;
+    }
   }
 
 }

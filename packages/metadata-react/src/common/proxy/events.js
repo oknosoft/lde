@@ -40,16 +40,16 @@ export function event_src({wsql, md, utils, adapters: {pouch}, cat}) {
     // начинаем слушать события сервера
     wsql.evt_src = new EventSource(`/couchdb/events/${pouch.props._user}`);
     wsql.evt_src.addEventListener('doc', onDoc, false);
-    wsql.evt_src.addEventListener('ram', onRam, false);
+    //wsql.evt_src.addEventListener('ram', onRam, false);
     wsql.evt_src.onerror = function (err) {
-      console.log(`sse: '${err.message}', readyState: ${this.readyState}`);
+      console.error(`sse: '${err.message}', readyState: ${this.readyState}`);
     };
   };
 
   const user_log_out = () => {
     if(wsql.evt_src) {
       wsql.evt_src.removeEventListener('doc', onDoc);
-      wsql.evt_src.removeEventListener('ram', onRam);
+      //wsql.evt_src.removeEventListener('ram', onRam);
       wsql.evt_src.close();
       wsql.evt_src = null;
     }

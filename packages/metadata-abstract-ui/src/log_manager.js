@@ -195,7 +195,7 @@ export default function log_manager() {
         }
 
         if(!this._rows){
-          this._rows = wsql.alasql.compile('select * from `ireg_log` where `date` >= ?');
+          this._rows = wsql.alasql.compile('select * from `ireg_log` where `date` >= ? and `class` <> "ram"');
         }
 
         const _stamp = Date.now();
