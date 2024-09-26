@@ -1,5 +1,5 @@
 /*!
- metadata-abstract-ui v2.0.35-beta.1, built:2024-09-24
+ metadata-abstract-ui v2.0.35-beta.2, built:2024-09-26
  © 2014-2024 Evgeniy Malyarov and the Oknosoft team http://www.oknosoft.ru
  metadata.js may be freely distributed under the MIT
  To obtain commercial license and technical support, contact info@oknosoft.ru
@@ -160,7 +160,7 @@ function log_manager() {
           });
         }
         if(!this._rows){
-          this._rows = wsql.alasql.compile('select * from `ireg_log` where `date` >= ?');
+          this._rows = wsql.alasql.compile('select * from `ireg_log` where `date` >= ? and `class` <> "ram"');
         }
         const _stamp = Date.now();
         const rows = this._rows([this._stamp + wsql.time_diff]);

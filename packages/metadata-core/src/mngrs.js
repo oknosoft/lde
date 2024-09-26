@@ -739,7 +739,7 @@ export class RefDataManager extends DataManager{
 
 		if(!o){
 
-			o = this.obj_constructor('', [attr, this]);
+			o = this.obj_constructor('', [attr, this, do_after_create === false]);
 
       // Триггер после создания
       const after_create_res = do_after_create === false ? false : o.after_create();
