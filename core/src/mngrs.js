@@ -685,9 +685,9 @@ export class EnumManager extends RefDataManager{
 		super(owner, className);
 
     const meta = this.metadata();
-    const {EnumObj} = this.root.classes;
+    const EnumConstructor = this.root.classes[this.objConstructor()] || this.root.classes.EnumObj;
 		for(var v of meta.values){
-      const value = new EnumObj(v, this, true);
+      const value = new EnumConstructor(v, this, true);
       if(v.latin && !this.hasOwnProperty(v.name)) {
         Object.defineProperty(this, v.name, {value});
       }
