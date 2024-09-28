@@ -295,11 +295,8 @@ export class BaseDataObj extends OwnerObj {
     // выполняем value_change с блокировкой эскалации
     if(!_data.loading) {
       _data.loading = true;
-      const res = this.valueChange(f, mf, v);
+      this.valueChange(f, mf, v);
       _data.loading = false;
-      if(res === false) {
-        return;
-      }
     }
 
     if(f === 'type' && v.types) {
