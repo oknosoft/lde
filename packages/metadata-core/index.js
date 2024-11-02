@@ -1,5 +1,5 @@
 /*!
- metadata-core v2.0.35-beta.2, built:2024-09-26
+ metadata-core v2.0.35-beta.2, built:2024-11-02
  © 2014-2024 Evgeniy Malyarov and the Oknosoft team http://www.oknosoft.ru
  metadata.js may be freely distributed under the MIT
  To obtain commercial license and technical support, contact info@oknosoft.ru
@@ -2355,7 +2355,7 @@ class RefDataManager extends DataManager{
         attr._rev && (obj._obj._rev = attr._rev);
 			}
       for(const ts in tabular_sections) {
-        obj[ts]._index && obj[ts]._index.clear();
+        obj[ts]?._index?.clear();
       }
 			res.push(obj);
 		}
@@ -2879,7 +2879,7 @@ class EnumManager extends RefDataManager{
       }
     }
     for(const i in selection){
-      if(i.substr(0,1)!="_"){
+      if(i.substring(0,1) != "_"){
         if(i == "ref"){
           sref = selection[i].hasOwnProperty("in") ? selection[i].in : selection[i];
         }
@@ -3572,10 +3572,10 @@ const utils = {
 		if (type.date_part) {
 			return this.fix_date(str, true);
 		}
-		if (type['digits']) {
+		if (type['digits'] || type.types?.[0] === 'number') {
 			return this.fix_number(str, true);
 		}
-		if (type.types && type.types[0] === 'boolean') {
+		if (type.types?.[0] === 'boolean') {
 			return this.fix_boolean(str);
 		}
 		return str;

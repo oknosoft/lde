@@ -837,7 +837,7 @@ export class RefDataManager extends DataManager{
         attr._rev && (obj._obj._rev = attr._rev);
 			}
       for(const ts in tabular_sections) {
-        obj[ts]._index && obj[ts]._index.clear();
+        obj[ts]?._index?.clear();
       }
 			res.push(obj);
 		}
@@ -1569,7 +1569,7 @@ export class EnumManager extends RefDataManager{
     }
 
     for(const i in selection){
-      if(i.substr(0,1)!="_"){
+      if(i.substring(0,1) != "_"){
         if(i == "ref"){
           sref = selection[i].hasOwnProperty("in") ? selection[i].in : selection[i];
         }

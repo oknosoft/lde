@@ -438,10 +438,10 @@ const utils = {
 		if (type.date_part) {
 			return this.fix_date(str, true);
 		}
-		if (type['digits']) {
+		if (type['digits'] || type.types?.[0] === 'number') {
 			return this.fix_number(str, true);
 		}
-		if (type.types && type.types[0] === 'boolean') {
+		if (type.types?.[0] === 'boolean') {
 			return this.fix_boolean(str);
 		}
 		return str;
