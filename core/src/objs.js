@@ -554,7 +554,7 @@ export class BaseDataObj extends OwnerObj {
    *
    * @event AFTER_LOAD
    */
-  async beforeLoad(raw) {
+  async afterLoad(raw) {
     return this;
   }
 
@@ -667,11 +667,11 @@ export class DataObj extends BaseDataObj {
     }
     else {
       _data.loading = true;
-      return this._manager.adapter.load_obj(this, attr)
+      return this._manager.adapter.loadObj(this, attr)
         .then(() => {
           _data.loading = false;
           _data.modified = false;
-          return this.after_load();
+          return this.afterLoad();
         });
     }
   }
@@ -683,7 +683,7 @@ export class DataObj extends BaseDataObj {
    */
   unload() {
     const {_obj, ref, _data, _manager} = this;
-    _manager.unload_obj(ref);
+    _manager.unloadObj(ref);
     _data.loading = true;
     //_manager.emit_async('unload', this);
     for (const ts in this._metadata().tabular_sections) {
