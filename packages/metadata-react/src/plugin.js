@@ -15,7 +15,7 @@ import TypeFieldCell from './DataField/FieldTypeCell';
 import PathFieldCell from './DataField/FieldPathCell';
 import PropsFieldCell from './DataField/FieldPropsCell';
 import dialogs from './App/dialogs';
-import {Editors, Formatters} from 'react-data-grid-addons';
+import {Editors, Formatters, Draggable} from 'react-data-grid-addons';
 import DataGrid from 'react-data-grid';
 import {withStyles, makeStyles} from '@material-ui/styles';
 import * as muiCore from '@material-ui/core';
@@ -455,6 +455,7 @@ export default {
         makeStyles,
         ...muiCore,
         classnames,
+        reactDataGrid: {Editors, Formatters, Draggable},
         prevent(evt) {
           try {evt.preventDefault();}
           catch(e) {}

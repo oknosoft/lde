@@ -10,6 +10,8 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import InputRadio from './InputRadio';
 import InputCheckbox from './InputCheckbox';
+import Alert from './Alert';
+import Dialog from './Dialog';
 
 export default {
 
@@ -21,6 +23,9 @@ export default {
   init ({handleIfaceState, handleNavigate, DataList, lazy}) {
     Object.assign(this, {handleIfaceState, handleNavigate, DataList, lazy});
   },
+
+  Dialog,
+  Alert,
 
   close_confirm(name = 'confirm') {
     this.handleIfaceState({
