@@ -9,8 +9,8 @@
     "yarn": "^1.22"
   },
   "dependencies": {
-    "alasql": "^4.5",
-    "debug": "^4.3",
+    "alasql": "^4.6",
+    "debug": "^4.4",
     "moment": "^2.30",
     "uuid": "^8.3"
   },

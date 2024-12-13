@@ -117,6 +117,14 @@ const date_frmts = ['DD-MM-YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY HH:mm', 'DD-MM-YYYY 
 
 const rxref = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
+const translit = {
+  in: "а А б Б в В г Г д Д е Е ё Ё ж Ж з З и И й Й к К л Л м М н Н о О п П р Р с С т Т у У ф Ф х Х ц Ц ч Ч ш Ш щ Щ ъ Ъ ы Ы ь Ь э Э ю Ю я Я « » № { [ } ] | \ ^ ~ `".split(' '),
+  out: "a A b B v V g G d D e E yo Yo zh Zh z Z i I j J k K l L m M n N o O p P r R s S t T u U f F x X c C ch Ch sh Sh w W ' ' y Y ' ' e E ju Ju ya Ya < > N ( ( ) ) I / ' - '".split(' '),
+  latin: " !@#$%&'\"()*+,-_./0123456789:;<=>?ABCDEFGIKLMNJOPQRSTUVWXYZHabcdefgiklmnjopqrstuvwxyzh\r\n\t",
+  map: new Map(),  
+}
+translit.in.forEach((symb, index) => translit.map.set(symb, translit.out[index]));
+
 /**
  * ### Коллекция вспомогательных методов
  * @class Utils
@@ -127,6 +135,24 @@ const rxref = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9
 const utils = {
 
 	moment,
+
+  translit(str) {
+    let res = '';
+    for(let i=0; i < str.length; i++) {
+      const symb = str[i];
+      let out = translit.map.get(symb);
+      if(out) {
+        res += out;
+      }
+      else if(translit.latin.includes(symb)) {
+        res += symb;
+      }
+      else {
+        res += '?';
+      }
+    }
+    return res;
+  },
 
   /**
    * выпускаем наружу методы из библиотеки uuid, чтобы с версиями импорта не париться

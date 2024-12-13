@@ -17,7 +17,7 @@
     "hammerjs": "^2.0.8",
     "marked": "^3.0",
     "rc-calendar": "^9.15",
-    "rc-cascader": "^3.28",
+    "rc-cascader": "^3.31",
     "react-data-grid": "^6.1",
     "react-data-grid-addons": "^6.1",
     "react-draggable": "^4.4",

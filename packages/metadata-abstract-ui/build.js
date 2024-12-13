@@ -9,7 +9,7 @@ const cleanup = require('rollup-plugin-cleanup');
 const path = require('path');
 const package_data = require(path.resolve(__dirname, './package.json'));
 
-const external = ['clipboard', 'dataframe', 'cron', 'xlsx'];
+const external = ['clipboard', 'dataframe', 'xlsx'];
 const plugins = [
 	resolve(),
 	replace({PACKAGE_VERSION: `"${package_data.version}"`}),
@@ -45,19 +45,6 @@ return rollup({
     name: package_data.name.replace(/-/g, '_') + '_meta',
     banner: header,
     file: path.resolve(__dirname, './meta.js'),
-    sourcemap: true,
-  }))
-
-  .then(() => rollup({
-    input: path.resolve(__dirname, './src/cron.js'),
-    external,
-    plugins,
-  }))
-  .then((bundle) => bundle.write({
-    format: 'cjs', // output format - 'amd', 'cjs', 'es', 'iife', 'umd'
-    name: package_data.name.replace(/-/g, '_') + '_cron',
-    banner: header,
-    file: path.resolve(__dirname, './cron.js'),
     sourcemap: true,
   }))
 
