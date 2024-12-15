@@ -610,8 +610,9 @@ $p.utils.__define({
       return (window.Docxtemplater ?
         Promise.resolve() :
         Promise.all([
-          $p.load_script("https://cdn.jsdelivr.net/jszip/2/jszip.min.js", "script"),
-          $p.load_script("https://cdn.jsdelivr.net/combine/gh/open-xml-templating/docxtemplater-build/build/docxtemplater-latest.min.js,gh/open-xml-templating/docxtemplater-image-module-build/build/docxtemplater-image-module-latest.min.js", "script"),
+          $p.load_script("/dist/jszip.min.js", "script"),
+          $p.load_script("/dist/docxtemplater.min.js", "script"),
+          $p.load_script("/dist/docxtemplater-image-module.min.js", "script"),
         ]))
         .then(function () {
           if(!Docxtemplater.prototype.saveAs){

@@ -1,5 +1,5 @@
 /*!
- metadata-abstract-ui v2.0.35-beta.2, built:2024-12-13
+ metadata-abstract-ui v2.0.36-beta.1, built:2024-12-15
  © 2014-2024 Evgeniy Malyarov and the Oknosoft team http://www.oknosoft.ru
  metadata.js may be freely distributed under the MIT
  To obtain commercial license and technical support, contact info@oknosoft.ru
@@ -15,8 +15,9 @@ function docxtemplater ({wsql, utils}) {
       docx = Promise.resolve();
     }
     else {
-      docx = ('JSZip' in window ? Promise.resolve() : utils.load_script('https://cdn.jsdelivr.net/jszip/2/jszip.min.js', 'script'))
-        .then(() => utils.load_script('https://cdn.jsdelivr.net/combine/gh/open-xml-templating/docxtemplater-build@3.1.5/build/docxtemplater-latest.min.js,gh/open-xml-templating/docxtemplater-image-module-build@3.0.2/build/docxtemplater-image-module-latest.min.js', 'script'));
+      docx = ('JSZip' in window ? Promise.resolve() : utils.load_script('/dist/jszip.min.js', 'script'))
+        .then(() => utils.load_script('/dist/docxtemplater.min.js', 'script'))
+        .then(() => utils.load_script('/dist/docxtemplater-image-module.min.js', 'script'));
     }
     return docx.then(function () {
       if(!Docxtemplater.prototype.saveAs) {
@@ -33,8 +34,8 @@ function docxtemplater ({wsql, utils}) {
     if('XLSX' in window) {
       return Promise.resolve();
     }
-    return ('JSZip' in window ? Promise.resolve() : utils.load_script('https://cdn.jsdelivr.net/jszip/2/jszip.min.js', 'script'))
-      .then(() => utils.load_script('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js', 'script'));
+    return ('JSZip' in window ? Promise.resolve() : utils.load_script('/dist/jszip.min.js', 'script'))
+      .then(() => utils.load_script('/dist/xlsx.full.min.js', 'script'));
   };
 }
 

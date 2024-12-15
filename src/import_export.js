@@ -219,7 +219,7 @@ DataManager.prototype.export = function(attr){
 
 		}else if(options.format == "xlsx"){
 			if(!window.xlsx)
-				$p.load_script("//cdn.jsdelivr.net/js-xlsx/latest/xlsx.core.min.js", "script", export_xlsx);
+				$p.load_script("/dist/xlsx.full.min.js", "script", export_xlsx);
 			else
 				export_xlsx();
 
