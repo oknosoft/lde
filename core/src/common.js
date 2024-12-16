@@ -11,7 +11,7 @@ import Meta from './meta';
 import msg from './i18n.ru';
 import classes from './classes';
 import * as symbols from './meta/symbols';
-import {DataAdapters} from './adapter'
+import {DataAdapters} from './adapter';
 
 
 /**

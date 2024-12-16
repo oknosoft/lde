@@ -29,7 +29,7 @@ return rollup({
 })
   .then((bundle) => bundle.write({
     dir: path.resolve(__dirname, './dist'),
-    format: 'es', // output format - 'amd', 'cjs', 'es', 'iife', 'umd'
+    format: 'cjs', // output format - 'amd', 'cjs', 'es', 'iife', 'umd'
     banner,
     sourcemap: true,
   }));

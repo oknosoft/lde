@@ -23,6 +23,14 @@
     "uuid": "^10.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.26",
+    "@babel/preset-env": "^7.26",
+    "@babel/preset-react": "^7.26",
+    "@rollup/plugin-node-resolve": "^16.0",
+    "@rollup/plugin-replace": "^6.0",
+    "babel-loader": "^9.2",
+    "react": "^19.0",
+    "react-dom": "^19.0",
     "rollup": "^4.19",
     "rollup-plugin-cleanup": "^3.2",
     "typescript": "^5.5",
