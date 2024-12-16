@@ -31,12 +31,12 @@
     "babel-loader": "^9.2",
     "react": "^19.0",
     "react-dom": "^19.0",
-    "rollup": "^4.19",
+    "rollup": "^4.28",
     "rollup-plugin-cleanup": "^3.2",
-    "typescript": "^5.5",
-    "webpack": "^5.93",
+    "typescript": "^5.7",
+    "webpack": "^5.97",
     "webpack-cli": "^5.1",
-    "webpack-dev-server": "^5.0"
+    "webpack-dev-server": "^5.2"
   },
   "peerDependecies": {},
   "files": [
