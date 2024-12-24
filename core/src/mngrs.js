@@ -6,7 +6,7 @@
 
 import msg from './i18n.ru';
 import MetaEventEmitter from './meta/emitter';
-import {pascalCase} from 'change-case';
+import {pascalCase} from '../lib/change-case';
 
 import {own, alias} from './meta/symbols';
 const string = 'string';

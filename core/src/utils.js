@@ -612,7 +612,7 @@ class MetaUtils extends OwnerObj {
      * поддержаны операторы `in`, `not` и `like` и фильтрация через внешнюю функцию
      * @param src {Object|Array}
      * @param selection {Object|function} - в ключах имена полей, в значениях значения фильтра или объект {like: "значение"} или {not: значение}
-     * @param callback {Function}
+     * @param [callback] {Function}
      * @return {Array}
      * @private
      */
@@ -627,7 +627,7 @@ class MetaUtils extends OwnerObj {
             delete selection._top;
           }
           else {
-            top = 300;
+            top = 1000;
           }
           if(selection.hasOwnProperty('_skip')) {
             skip = selection._skip;

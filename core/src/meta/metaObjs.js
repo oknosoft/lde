@@ -1,7 +1,7 @@
 
 import {own, alias, get, set} from './symbols';
 import {enmFields} from '../system'
-import {camelCase, pascalCase} from 'change-case';
+import {camelCase, pascalCase} from '../../lib/change-case';
 
 /**
  * Абстрактный класс со ссылкой на владельца
