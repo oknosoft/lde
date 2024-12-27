@@ -194,17 +194,13 @@ export function trainCase(input, options) {
 
 function lowerFactory(locale) {
   return (input) => {
-    return locale === false
-      ? (input) => input.toLowerCase()
-      : (input) => input.toLocaleLowerCase(locale);
+    return locale === false ? input.toLowerCase() : input.toLocaleLowerCase(locale);
   }
 }
 
 function upperFactory(locale) {
   return (input) => {
-    return locale === false
-      ? (input) => input.toUpperCase()
-      : (input) => input.toLocaleUpperCase(locale);
+    return locale === false ? input.toUpperCase() : input.toLocaleUpperCase(locale);
   };
 }
 
