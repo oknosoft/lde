@@ -223,11 +223,11 @@ function pascalCaseTransformFactory(lower, upper) {
 
 function splitPrefixSuffix(input, options) {
   const splitFn =
-    options.split ?? (options.separateNumbers ? splitSeparateNumbers : split);
+    options?.split ?? (options?.separateNumbers ? splitSeparateNumbers : split);
   const prefixCharacters =
-    options.prefixCharacters ?? DEFAULT_PREFIX_SUFFIX_CHARACTERS;
+    options?.prefixCharacters ?? DEFAULT_PREFIX_SUFFIX_CHARACTERS;
   const suffixCharacters =
-    options.suffixCharacters ?? DEFAULT_PREFIX_SUFFIX_CHARACTERS;
+    options?.suffixCharacters ?? DEFAULT_PREFIX_SUFFIX_CHARACTERS;
   let prefixIndex = 0;
   let suffixIndex = input.length;
 
