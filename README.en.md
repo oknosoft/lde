@@ -29,4 +29,4 @@ Many thanks to
 
 The license on this repo covers all contents of the repo, but does not supercede the existing licenses for products used for this work and other products.
 
-(c) 2014-2021, Oknosoft Lab (info@oknosoft.ru)
+(c) 2014-2025, Oknosoft Lab (info@oknosoft.ru)
