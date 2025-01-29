@@ -3894,10 +3894,66 @@ DataManager.prototype.form_obj = function(pwnd, attr){
           title: 'Документ изменён',
         });
       });
-
-
 		}
+    handleAddLink();
 	}
+
+  function handleAddLink() {
+
+    if(!event?.altKey && !event?.ctrlKey && !event?.shiftKey) {
+      return;
+    }
+
+    if(!o || o._modified || o.is_new()) {
+      $p.msg.show_msg({
+        type: 'alert-warning',
+        text: 'Перед добавлением вложения, выполните команду "Записать"',
+        title: 'Документ изменён',
+      });
+      return;
+    }
+
+    const {ui: {dialogs}, msg}  = $p;
+
+    wnd.elmnts.vault_pop.hide();
+    wnd.elmnts.vault.unload();
+    wnd.elmnts.vault = null;
+    wnd.progressOn();
+
+    dialogs.input_value({
+      title: 'Расположение объекта',
+      text: 'Укажите url ресурса',
+      type: 'string',
+      initialValue: '',
+    })
+      .then((url) => {
+        return dialogs.input_value({
+          title: 'Название объекта',
+          text: 'Наименование ссылки',
+          type: 'string',
+          initialValue: 'Новая ссылка',
+        })
+          .then((name) => {
+            const type = 'application/internet-shortcut';
+            const data = new Blob([`[InternetShortcut]\nURL=${url}`], {type});
+            if(!name.endsWith('.url')) {
+              name += '.url';
+            }
+            return o.save_attachment(name, data, type);
+          });
+      })
+      .then(() => o.load())
+      .catch((err) => {
+        // показываем диалог
+        // this.setState({dialog: {
+        //     title: msg.file_download,
+        //     message: err.message,
+        //   }});
+      })
+      .then(() => wnd.progressOff());
+
+    return true;
+  }
 
 
 	/**
@@ -5969,7 +6025,7 @@ DataManager.prototype.export = function(attr){
 
 		}else if(options.format == "xlsx"){
 			if(!window.xlsx)
-				$p.load_script("//cdn.jsdelivr.net/js-xlsx/latest/xlsx.core.min.js", "script", export_xlsx);
+				$p.load_script("/dist/xlsx.full.min.js", "script", export_xlsx);
 			else
 				export_xlsx();
 
