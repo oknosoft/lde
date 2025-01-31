@@ -55,7 +55,7 @@ export class Iterator {
  * @param {ManagersCollection} owner - коллекция менеджеров
  * @param {string} className  - имя типа менеджера объекта. например, "doc.calc_order"
  */
-export class DataManager extends MetaEventEmitter{
+export class DataManager extends MetaEventEmitter {
 
   /**
    * Хранилище объектов данного менеджера
@@ -478,8 +478,8 @@ export class RefDataManager extends DataManager {
 	 */
 	load(aattr, forse){
 		const res = [];
-    const {jobPrm} = this.root;
-    const {grouping, tabulars} = this.metadata();
+    const {root: {jobPrm}, predefined} = this;
+    const {grouping, tabulars, names} = this.metadata();
 		for(const attr of aattr){
       let skipMixin;
 		  if(grouping === 'array' && attr.ref.length <= 3) {
@@ -514,6 +514,17 @@ export class RefDataManager extends DataManager {
         obj[ts]?._index?.clear();
       }
 			res.push(obj);
+      if(predefined) {
+        if(attr.predefined_name) {
+          predefined[names?.[attr.predefined_name] || attr.predefined_name] = obj;
+        }
+        else if(attr.type && attr.synonym) {
+          predefined[attr.synonym] = obj;
+        }
+        else if(names?.[obj.ref]) {
+          predefined[names[obj.ref]] = obj;
+        }
+      }
 		}
 		return res;
 	}
@@ -645,7 +656,7 @@ export class RefDataManager extends DataManager {
  * @param className {string} - имя типа менеджера объекта
  * @constructor
  */
-export class DataProcessorsManager extends DataManager{
+export class DataProcessorsManager extends DataManager {
 
   constructor(owner, className) {
     super(owner, className);
@@ -679,7 +690,7 @@ export class DataProcessorsManager extends DataManager{
  * @param className {string} - имя типа менеджера объекта. например, "enm.open_types"
  * @constructor
  */
-export class EnumManager extends RefDataManager{
+export class EnumManager extends RefDataManager {
 
 	constructor(owner, className) {
 		super(owner, className);
@@ -860,7 +871,7 @@ export class EnumManager extends RefDataManager{
  * @constructor
  * @param className {string} - имя типа менеджера объекта. например, "ireg.prices"
  */
-export class RegisterManager extends DataManager{
+export class RegisterManager extends DataManager {
 
 	/**
 	 * Помещает элемент ссылочных данных в локальную коллекцию
@@ -1319,7 +1330,7 @@ export class RegisterManager extends DataManager{
  * @constructor
  * @param className {string} - имя типа менеджера объекта. например, "ireg.prices"
  */
-export class InfoRegManager extends RegisterManager{
+export class InfoRegManager extends RegisterManager {
 
 	/**
 	 * Возаращает массив записей - срез первых значений по ключам отбора
@@ -1352,7 +1363,7 @@ export class InfoRegManager extends RegisterManager{
  * @constructor
  * @param className {string} - имя типа менеджера объекта. например, "areg.goods_on_stores"
  */
-export class AccumRegManager extends RegisterManager{
+export class AccumRegManager extends RegisterManager {
 
 }
 
@@ -1363,7 +1374,14 @@ export class AccumRegManager extends RegisterManager{
  *
  * @extends RefDataManager
  */
-export class CatManager extends RefDataManager{
+export class CatManager extends RefDataManager {
+
+  /**
+   * @summary Ссылки предопределённых элементов
+   * @type Object
+   * @final
+   */
+  predefined = {};
 
 	/**
 	 * Возвращает объект по наименованию
