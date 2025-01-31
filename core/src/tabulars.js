@@ -136,10 +136,9 @@ export class TabularSection extends Array {
 	 */
 	find(val, columns) {
     if(typeof val === 'function') {
-      return this.filter(val);
+      return Array.prototype.find.call(this, val);
     }
-		const res = this[own]._manager.utils.find(this, val, columns);
-		return res && res._row;
+		return this[own]._manager.utils.find(this, val, columns);
 	}
 
   filter(filterFunc) {
