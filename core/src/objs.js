@@ -1142,7 +1142,15 @@ export class CatObj extends DataObj {
    * @type String
    */
   get presentation() {
-    return this.name || this.id || '';
+    const meta = this._metadata();
+    if(this.empty()) {
+      return `~Пустая ${meta.objPresentation || meta.name}`;
+    }
+    const name = this[meta.mainPresentation];
+    if(!name && this.isNew()) {
+      return `~Оборванная ${meta.objPresentation || meta.name}`;
+    }
+    return name;
   }
 
   /**
@@ -1150,14 +1158,17 @@ export class CatObj extends DataObj {
    * @type String|Number
    */
   get id() {
-    return this[get]('id');
+    return this._metadata().codeLength ? this[get]('id') : '';
   }
   set id(v) {
+    if(!this._metadata().codeLength) {
+      throw new Error('Попытка задать код справочнику без кода');
+    }
     this[set]('id', v);
   }
 
   /**
-   * Наименование элемента справочника
+   * @summary Наименование элемента справочника
    * @type String
    */
   get name() {
@@ -1172,18 +1183,29 @@ export class CatObj extends DataObj {
 
   }
   set parent(v) {
-    if(this._metadata().hierarchical) {
-      this[set]('parent', v);
+    if(!this._metadata().hierarchical) {
+      throw new Error('Попытка задать родителя плоскому справочнику');
     }
+    this[set]('parent', v);
   }
 
   get owner() {
     return this._metadata().hasOwners ? this[get]('owner') : null;
   }
   set owner(v) {
-    if(this._metadata().hasOwners) {
-      this[set]('owner', v);
+    if(!this._metadata().hasOwners) {
+      throw new Error('Попытка задать владельца свободному справочнику');
     }
+    this[set]('owner', v);
+  }
+
+  /**
+   * @summary Выясняет, является ли элемент предопределённым с именем 'name'
+   * @param {String} name
+   * @return {Boolean}
+   */
+  is(name) {
+    return this._manager.predefined(name) === this;
   }
 
 

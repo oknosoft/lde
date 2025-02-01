@@ -11,7 +11,7 @@ export const meta = {
       hierarchical: false,
       groupHierarchy: true,
       mainPresentation: "name",
-      codeLength: 0,
+      codeLength: 50,
       id: "u",
       fields: {
         invalid: {

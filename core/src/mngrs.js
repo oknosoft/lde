@@ -90,9 +90,9 @@ export class DataManager extends MetaEventEmitter {
      * @type Object
      */
     this.index = {
-      predefined: {},
-      id: {},
       year: {},
+      id: {},
+      predefined: {},
     };
 
 		/**
@@ -478,7 +478,7 @@ export class RefDataManager extends DataManager {
 	 */
 	load(aattr, forse){
 		const res = [];
-    const {root: {jobPrm}, predefined} = this;
+    const {root: {jobPrm}, index: {predefined}} = this;
     const {grouping, tabulars, names} = this.metadata();
 		for(const attr of aattr){
       let skipMixin;
@@ -517,9 +517,6 @@ export class RefDataManager extends DataManager {
       if(predefined) {
         if(attr.predefined_name) {
           predefined[names?.[attr.predefined_name] || attr.predefined_name] = obj;
-        }
-        else if(attr.type && attr.synonym) {
-          predefined[attr.synonym] = obj;
         }
         else if(names?.[obj.ref]) {
           predefined[names[obj.ref]] = obj;
@@ -1375,13 +1372,6 @@ export class AccumRegManager extends RegisterManager {
  * @extends RefDataManager
  */
 export class CatManager extends RefDataManager {
-
-  /**
-   * @summary Ссылки предопределённых элементов
-   * @type Object
-   * @final
-   */
-  predefined = {};
 
 	/**
 	 * Возвращает объект по наименованию
