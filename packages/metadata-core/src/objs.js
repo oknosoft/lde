@@ -1566,6 +1566,10 @@ export class DataProcessorObj extends DataObj {
 
     utils._mixin(this, attr);
   }
+
+  empty() {
+    return false;
+  }
 }
 
 

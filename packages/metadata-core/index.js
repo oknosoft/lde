@@ -1,5 +1,5 @@
 /*!
- metadata-core v2.0.36-beta.1, built:2024-12-15
+ metadata-core v2.0.36-beta.1, built:2025-02-03
  © 2014-2024 Evgeniy Malyarov and the Oknosoft team http://www.oknosoft.ru
  metadata.js may be freely distributed under the MIT
  To obtain commercial license and technical support, contact info@oknosoft.ru
@@ -1639,6 +1639,9 @@ class DataProcessorObj extends DataObj {
       }
     }
     utils._mixin(this, attr);
+  }
+  empty() {
+    return false;
   }
 }
 class TaskObj extends NumberDocAndDate(CatObj) {
