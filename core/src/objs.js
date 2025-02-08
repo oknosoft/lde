@@ -5,7 +5,7 @@
 
 import {string} from './utils';
 import {own, get, set, hash, notify, mf} from './meta/symbols';
-import {OwnerObj, TypeDef, MetaField} from './meta/metaObjs';
+import {OwnerObj, MetaField} from './meta/metaObjs';
 import {TabularSection} from './tabulars';
 
 class InnerData {
@@ -88,7 +88,7 @@ export class BaseDataObj extends OwnerObj {
     }
     // TODO: заменить на метод класса MetaObj
     if(fields?.type && this.#obj.type) {
-      this.#obj.type = new TypeDef(this.#obj.type);
+      this.#obj.type = new manager.root.classes.TypeDef(this.#obj.type);
     }
 
   }
@@ -166,111 +166,8 @@ export class BaseDataObj extends OwnerObj {
   }
 
   [get](f) {
-
     const res = this.#obj[f];
-    const fMeta = this._metadata(f);
-    const {type} = fMeta;
-
-    // для простых типов, возвращаем почти в лоб
-    if(type.isSingleType) {
-      return fMeta.fixSingle(res, type);
-    }
-
-    // для простых ссылочных, тоже почти в лоб
-    if(type.isSingleRef) {
-      const mgr = fMeta[own].mgr(type.types[0]);
-      return mgr.get(res);
-    }
-
-    if(type.isJson) {
-      // TODO: надо добиться, чтобы всегда
-      return rtype === 'object' ? res : {};
-    }
-
-    // для дальнейшего разбора, потребуется тип значения
-    const {utils} = this._manager;
-    const rtype = typeof res;
-    // если доступны ссылочные и на входе строка
-    if(type.isRef && rtype === string) {
-      const parts = res.split('|');
-      if(parts.length === 1 && utils.is.guid(res) && !utils.is.emptyGuid(res)) {
-        for(const test of type.types) {
-          if(test.includes('.')) {
-            const mgr = fMeta[own].mgr(test);
-            const o = mgr.byRef(res);
-            if(o) {
-              this.#obj[f] = `${mgr.metadata().id}|${res}`;
-              return o;
-            }
-          }
-        }
-      }
-      else if(parts.length === 2) {
-        const mgr = fMeta[own].mgr(parts[0]);
-        if(mgr) {
-          return mgr.get(parts[1]);
-        }
-      }
-    }
-
-
-    // для перечислений и табличных частей, возвращаем значение в лоб
-    if(this._manager.isEnum) {
-      return res;
-    }
-
-    if(f === 'type' && rtype === 'object') {
-      return res;
-    }
-
-
-
-    if(type.isRef) {
-
-      if(type.digits && rtype === 'number') {
-        return res;
-      }
-
-      if(type.hasOwnProperty('str_len') && !utils.is.guid(res)) {
-        return res;
-      }
-
-      // затычка
-      const mgr = fMeta[own].mgr(type.types.find(v => v.includes('.') || type.types[0]));
-      return mgr?.get?.(res);
-
-      // const mgr = _manager.value_mgr(_obj, f, type);
-      // if(mgr) {
-      //   if(utils.is.dataMgr(mgr)) {
-      //     return mgr.get(res, false, false);
-      //   }
-      //   else {
-      //     return utils.fetch_type(res, mgr);
-      //   }
-      // }
-
-      if(res) {
-        // управляемый лог
-        //typeof utils.debug === 'function' && utils.debug([f, type, _obj]);
-        return null;
-      }
-
-    }
-    else if(type.datePart) {
-      return utils.fix.date(res, true);
-    }
-    else if(type.digits) {
-      return utils.fix.number(res, !type.hasOwnProperty('str_len'));
-    }
-    else if(type.types[0] == 'boolean') {
-      return utils.fix.boolean(res);
-    }
-    else if(type.types[0] == 'json') {
-      return rtype === 'object' ? res : {};
-    }
-    else {
-      return res;
-    }
+    return this._metadata(f).type.fetchType(res, this.#obj, f);
   }
 
   [notify](f) {
@@ -469,11 +366,21 @@ export class BaseDataObj extends OwnerObj {
   }
 
   /**
-   * Возвращает "истина" для нового (еще не записанного или не прочитанного) объекта
+   * @summary Признак _Это новый_
+   * @desc Возвращает _истина_ для нового (еще не записанного или не прочитанного) объекта
    * @return {Boolean}
    */
   isNew() {
     return !this._data || this._data.isNew;
+  }
+
+  /**
+   * @summary Принадлежность экземпляра к типу _name_
+   * @param {String} [name]
+   * @return {Boolean}
+   */
+  isInstanceOf(name) {
+    return this instanceof this._manager.root.classes[name];
   }
 
   /**
@@ -1098,7 +1005,7 @@ export class DataObj extends BaseDataObj {
     const res = [];
     if(dests) {
       const condition = this._destinations_condition || {predefined_name: `${this instanceof DocObj ? 'Документ' : 'Справочник'}_${this._metadata().name}`};
-      dests.find_rows(condition, destination => {
+      dests.findRows(condition, destination => {
         const ts = destination.extra_fields;
         if(ts) {
           ts.each(row => {
@@ -1144,7 +1051,7 @@ export class CatObj extends DataObj {
   get presentation() {
     const meta = this._metadata();
     if(this.empty()) {
-      return `~Пустая ${meta.objPresentation || meta.name}`;
+      return '';
     }
     const name = this[meta.mainPresentation];
     if(!name && this.isNew()) {
@@ -1604,7 +1511,7 @@ export class TabularSectionRow extends BaseDataObj {
   }
 
   /**
-   * Копирует строку табличной части
+   * @summary Копирует строку табличной части
    */
   clone() {
     const {_manager} = this;

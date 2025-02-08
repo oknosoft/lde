@@ -395,7 +395,7 @@ export const meta = {
   },
 };
 
-export default function ({cat, classes, symbols}, exclude) {
+export default function abonentsClasses({cat, classes, symbols}, exclude) {
 
   const {CatObj, CatManager, TabularSectionRow} = classes;
   const {get, set} = symbols;

@@ -310,6 +310,6 @@ export const meta = {
   }
 };
 
-export default function ({cat, classes, symbols}, exclude) {
+export default function propertiesClasses({cat, classes, symbols}, exclude) {
 
 };

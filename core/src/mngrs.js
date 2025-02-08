@@ -8,8 +8,7 @@ import msg from './i18n.ru';
 import MetaEventEmitter from './meta/emitter';
 import {pascalCase} from '../lib/change-case';
 
-import {own, alias} from './meta/symbols';
-const string = 'string';
+import {own, alias, string} from './meta/symbols';
 
 export class Iterator {
 
@@ -246,7 +245,7 @@ export class DataManager extends MetaEventEmitter {
 	 * @param {Function} [callback] - в который передается текущий объект данных на каждой итерации
 	 * @return {Array}
 	 */
-  find_rows(selection, callback) {
+  findRows(selection, callback) {
     return this.utils.find.rows(this, selection, callback);
   }
 
@@ -351,10 +350,10 @@ export class DataManager extends MetaEventEmitter {
     }
 
     if(this.cachable.endsWith('ram') || this._direct_ram || (selection && selection._local)) {
-      this.find_rows(selection._mango ? selection.selector : selection, push);
+      this.findRows(selection._mango ? selection.selector : selection, push);
       return Promise.resolve(l);
     }
-    return this.adapter.find_rows(this, selection)
+    return this.adapter.findRows(this, selection)
       .then((data) => {
         for (const v of data) {
           push(v);

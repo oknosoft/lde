@@ -86,7 +86,7 @@ export const meta = {
   },
 };
 
-export default function ({cat, classes, symbols}, exclude) {
+export default function usersClasses({cat, classes, symbols}, exclude) {
   const {CatObj, TabularSectionRow} = classes;
   const {get, set} = symbols;
 

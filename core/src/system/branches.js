@@ -464,7 +464,7 @@ export const meta = {
   },
 };
 
-export default function ({cat, classes, symbols}, exclude) {
+export default function branchesClasses({cat, classes, symbols}, exclude) {
 
   const {CatObj, CatManager, TabularSectionRow, ExtraFieldsRow} = classes;
   const {get, set} = symbols;

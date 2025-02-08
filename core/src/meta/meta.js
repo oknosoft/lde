@@ -10,7 +10,7 @@ import {DataManager} from '../mngrs';
 import mngrcollections from '../mngrcollections';
 import sys, {sysFields, sysClasses} from '../system';
 import {own} from './symbols';
-import {TypeDef, MetaObj, MetaField, MetaFields, MetaTabulars, OwnerObj} from './metaObjs';
+import {MetaObj, MetaField, MetaFields, MetaTabulars, OwnerObj} from './metaObjs';
 
 
 /**
@@ -19,7 +19,7 @@ import {TypeDef, MetaObj, MetaField, MetaFields, MetaTabulars, OwnerObj} from '.
  * По данным этого объекта, при старте приложения, формируются менеджеры данных, строятся динамические конструкторы объектов данных,
  * обеспечивается ссылочная типизация, рисуются автоформы объектов и списков
  */
-class Meta extends MetaEventEmitter {
+class AppMetadata extends MetaEventEmitter {
 
   /**
    * Хранилище объектов описания метаданных
@@ -67,7 +67,7 @@ class Meta extends MetaEventEmitter {
    */
   init(raw) {
     const root = this[own];
-    for(const patch of Meta._sys) {
+    for(const patch of AppMetadata._sys) {
       root.utils.patch(raw, patch);
     }
     for(const area of Object.keys(raw)) {
@@ -341,5 +341,5 @@ class Meta extends MetaEventEmitter {
 
 }
 
-export default Meta;
+export default AppMetadata;
 

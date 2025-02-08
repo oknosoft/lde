@@ -1,7 +1,6 @@
 
-import {own, alias, get, set} from './symbols';
-import {enmFields} from '../system'
-import {camelCase, pascalCase} from '../../lib/change-case';
+import {own, alias, get, set, string} from './symbols';
+import {enmFields} from '../system';
 
 /**
  * Абстрактный класс со ссылкой на владельца
@@ -70,11 +69,12 @@ export class MetaObj extends OwnerObj {
       this.fields = new MetaFields(this, enmFields);
     }
     else {
-      let {fields, tabulars, tabular_sections, ...other} = raw;
+      let {fields, tabulars, tabular_sections, schemas, ...other} = raw;
       if(tabular_sections) {
         tabulars = tabular_sections;
       }
       this.fields = new MetaFields(this, fields);
+      this.schemas = new MetaSchemas(this, schemas);
       this.tabulars = new MetaTabulars(this, tabulars);
       Object.assign(this, other);
     }
@@ -118,7 +118,7 @@ export class MetaObj extends OwnerObj {
         note: '',
         synonym: '',
         tooltip: '',
-        type: {types: ['string']},
+        type: {types: [string]},
       }});
 
     switch (field) {
@@ -254,17 +254,13 @@ export class MetaField extends OwnerObj {
   constructor(owner, name, fields) {
     super(owner, name);
     const {type, ...other} = fields[name];
+    const {TypeDef} = owner[own].root.classes;
     this.type = type instanceof TypeDef ? type : new TypeDef(type);
     Object.assign(this, other);
   }
 
   toString() {
     return `${this[own].toString()}.${this.synonym}`;
-  }
-
-  fixSingle(v, type) {
-    const {utils} = this[own][own].root;
-    return utils.fix.type(v, type);
   }
 
   /**
@@ -294,9 +290,9 @@ export class MetaField extends OwnerObj {
  * @summary Коллекция полей метаданных
  */
 export class MetaFields extends OwnerObj {
-
+  static alias = 'Реквизиты';
   constructor(owner, fields) {
-    super(owner);
+    super(owner, MetaFields.alias);
     for(const name in fields) {
       this[name] = new MetaField(this, name, fields);
     }
@@ -318,6 +314,28 @@ export class MetaFields extends OwnerObj {
 }
 
 /**
+ * @summary Коллекция схем компоновки
+ */
+export class MetaSchemas extends OwnerObj {
+  #raw;
+  static alias = 'Схемы компоновки';
+  constructor(owner, raw = {}) {
+    super(owner, MetaSchemas.alias);
+    this.#raw = {raw, schemas: {}};
+  }
+
+  get(name = 'main') {
+    if(this.#raw.raw[name] || !this.#raw.schemas[name]) {
+      const {className, root} = this[own];
+      this.#raw.schemas[name] = root.cat.schemeSettings.create(
+        Object.assign({obj: className, name: `${className}.${name}`}, this.#raw.raw[name])
+      )._loaded();
+    }
+    return this.#raw.schemas[name];
+  }
+}
+
+/**
  * @summary Коллекция метаданных табличных частей
  */
 export class MetaTabulars extends OwnerObj {
@@ -335,8 +353,9 @@ export class MetaTabulars extends OwnerObj {
 export class MetaTabular extends OwnerObj {
   constructor(owner, name, raw) {
     super(owner, name);
-    const {fields, tabulars, ...other} = raw[name];
+    const {fields, tabulars, schemas, ...other} = raw[name];
     this.fields = new MetaFields(this, fields);
+    this.schemas = new MetaSchemas(this, schemas);
     this.tabulars = new MetaTabulars(this, tabulars);
     Object.assign(this, other);
   }
@@ -346,7 +365,7 @@ export class MetaTabular extends OwnerObj {
    * @type {TypeDef}
    */
   get type() {
-    return tabularType;
+    return this.root.classes.TypeDef.tabularType;
   }
 
   get(name) {
@@ -372,86 +391,3 @@ export class MetaTabular extends OwnerObj {
   }
 }
 
-/**
- * @summary Описание типа
- */
-export class TypeDef {
-  constructor({date_part, str_len, str_fix, ...def}) {
-    if(date_part) {
-      def.datePart = pascalCase(date_part);
-    }
-    if(str_len) {
-      def.strLen = true;
-    }
-    if(str_fix) {
-      def.strFix = true;
-    }
-    Object.assign(this, def);
-  }
-
-  /**
-   * @summary Среди типов есть ссылочный
-   * @type Boolean
-   */
-  get isRef() {
-    return this.types.some(type => type.includes('.'));
-  }
-
-  /**
-   * @summary Это JSON объект
-   * @type Boolean
-   */
-  get isJson() {
-    return this.types[0] === 'json';
-  }
-
-  /**
-   * @summary Это табличная часть
-   * @type Boolean
-   */
-  get isTabular() {
-    return this.types[0] === 'tabular';
-  }
-
-  /**
-   * @summary Это составной тип
-   * @type Boolean
-   */
-  get isComposite() {
-    return this.types.length > 1;
-  }
-
-  /**
-   * @summary Этот тип не составной и ссылочный
-   * @type Boolean
-   */
-  get isSingleRef() {
-    return !this.isComposite && this.isRef;
-  }
-
-  /**
-   * @summary Этот тип не составной и простой (строка, число, булево)
-   * @type Boolean
-   */
-  get isSingleType() {
-    return !this.isComposite && !this.isRef;
-  }
-
-  hasType(type) {
-    for(const name of this.types) {
-      if(type === name) {
-        return true;
-      }
-      const parts = name.split('.');
-      if(parts.length === 2) {
-        if(type === `${parts[0]}.${parts[1]}` || type === `${parts[0]}.${camelCase(parts[1])}`) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-}
-
-const tabularType = new TypeDef({types: ['tabular']});

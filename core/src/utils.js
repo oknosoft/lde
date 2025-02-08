@@ -8,6 +8,7 @@
 
 import {OwnerObj} from './meta/metaObjs';
 import {own} from './meta/symbols';
+import {typeDef} from './meta/typeDef';
 
 import Aes from '../lib/aes';
 const {v1: uuidv1} = require('uuid');
@@ -348,14 +349,25 @@ class MetaUtils extends OwnerObj {
       enmMgr: (v) => v instanceof this.classes.EnumManager,
 
       /**
-       * Проверяет, является ли значенние табличной частью или строкой табличной части
+       * @summary Проверяет, является ли значенние табличной частью
        *
        * @param v {*} - проверяемое значение
        * @return {Boolean} - true, если значение является табличной частью
        */
       tabular: (v) => {
         const {classes} = this;
-        return v instanceof classes.TabularSectionRow || v instanceof classes.TabularSection;
+        return v instanceof classes.TabularSection;
+      },
+
+      /**
+       * @summary Проверяет, является ли значенние строкой табличной части
+       *
+       * @param v {*} - проверяемое значение
+       * @return {Boolean} - true, если значение является табличной частью
+       */
+      tsRow: (v) => {
+        const {classes} = this;
+        return v instanceof classes.TabularSectionRow;
       },
 
       /**
@@ -520,7 +532,7 @@ class MetaUtils extends OwnerObj {
        * Приводит тип значения v к типу метаданных
        *
        * @param str {*} - значение (обычно, строка, полученная из html поля ввода)
-       * @param {Object} type - поле type объекта метаданных (field.type)
+       * @param {TypeDef} type - описание типа объекта метаданных
        * @return {*}
        */
       type: (str, type) => {
@@ -528,7 +540,7 @@ class MetaUtils extends OwnerObj {
           return str;
         }
         if (type?.isRef) {
-          if(type.types && type.types.some((type) => type.startsWith('enm') || type.startsWith(string))){
+          if(type.types.some((type) => type.startsWith('enm') || type === string)){
             return str;
           }
           return this.fix.guid(str);
@@ -733,6 +745,7 @@ class MetaUtils extends OwnerObj {
       return {docs, count: pre.length};
     }
 
+    owner.classes.TypeDef = typeDef(this);
   }
 
   get classes() {
@@ -1287,7 +1300,7 @@ class MetaUtils extends OwnerObj {
    * @param {Error} err
    * @param {Promise} promise
    */
-  record_log = (err, promise) => {
+  recordLog = (err, promise) => {
     this[own].ireg?.log?.record?.(err, promise);
     console?.log(err, promise);
   };

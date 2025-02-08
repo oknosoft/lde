@@ -6,3 +6,4 @@ export const set = Symbol('set');
 export const hash = Symbol('hash');
 export const notify = Symbol('notify');
 export const mf = Symbol('mf'); // метаданные поля
+export const string = 'string';

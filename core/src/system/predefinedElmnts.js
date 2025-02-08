@@ -154,7 +154,7 @@ export const meta = {
   },
 };
 
-export default function ({cch, classes, symbols}, exclude) {
+export default function predefinedElmntsClasses({cch, classes, symbols}, exclude) {
   const {CatObj, TabularSectionRow} = classes;
   const {get, set} = symbols;
 

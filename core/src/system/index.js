@@ -1,6 +1,6 @@
 
 import {meta as log} from './log';
-import {meta as schemeSettings} from './schemeSettings';
+import schemeSettingsClasses, {meta as schemeSettings} from './schemeSettings';
 import {meta as destinations} from './destinations';
 import {meta as values} from './propertyValues';
 import {meta as formulas} from './formulas';
@@ -66,6 +66,7 @@ export const sysClasses = [
   branchesClasses,
   propertiesClasses,
   predefinedElmntsClasses,
+  schemeSettingsClasses,
 ];
 
 for(const curr of meta) {

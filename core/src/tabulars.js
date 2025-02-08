@@ -83,7 +83,7 @@ export class TabularSection extends Array {
 	 */
   clear(selection) {
     if(selection) {
-      for(const row of this.find_rows(selection)) {
+      for(const row of this.findRows(selection)) {
         this.splice(this.indexOf(row), 1);
       }
     }
@@ -151,11 +151,19 @@ export class TabularSection extends Array {
     return res;
   }
 
+  map(mapFunc) {
+    const res = [];
+    for(const row of this) {
+      res.push(mapFunc(row));
+    }
+    return res;
+  }
+
 	/**
 	 * Находит строки, соответствующие отбору
 	 * Если отбор пустой, возвращаются все строки табчасти
 	 *
-	 * @method find_rows
+	 * @method findRows
 	 * @param [selection] {Object} - в ключах имена полей, в значениях значения фильтра или объект {like: "значение"}
 	 * @param [callback] {Function} - в который передается строка табчасти на каждой итерации
 	 * @return {Array}
