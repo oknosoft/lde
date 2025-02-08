@@ -494,8 +494,9 @@ export const meta = {
               synonym: 'Ширина',
               tooltip: '',
               type: {
-                types: ['string'],
-                strLen: 6
+                types: ['number'],
+                digits: 6,
+                fraction: 0
               }
             },
             caption: {
@@ -518,19 +519,20 @@ export const meta = {
               synonym: 'Тип',
               tooltip: 'Тип элемента управления',
               type: {
-                types: ['enm.data_field_kinds'],
+                types: ['enm.dataFieldKinds'],
               }
             },
             formatter: {
               synonym: 'Формат',
               tooltip: 'Функция форматирования',
               type: {
-                types: ['cat.formulas'],
+                types: ['cat.formulas','string'],
+                strLen: 100
               },
               choiceParams: [
                 {
                   name: 'parent',
-                  path: []
+                  path: ['components']
                 }
               ]
             },
@@ -538,12 +540,13 @@ export const meta = {
               synonym: 'Редактор',
               tooltip: 'Компонент редактирования',
               type: {
-                types: ['cat.formulas'],
+                types: ['cat.formulas','string'],
+                strLen: 100
               },
               choiceParams: [
                 {
                   name: 'parent',
-                  path: []
+                  path: ['components']
                 }
               ]
             }
@@ -784,6 +787,33 @@ export const meta = {
   },
 };
 
-export default function ({classes}) {
+export default function schemeSettingsClasses({classes, symbols, md}, exclude) {
+  md.get('ss').constructorBase();
+  const {CatSchemeSettings: CatObj} = classes;
+  const {get, set} = symbols;
 
+  class CatSchemeSettings extends CatObj {
+
+    get columns() {
+      const {editors, formatters} = this._manager.root.ui;
+      return this.fields
+        .filter(v => v.use)
+        .map((row) => {
+          const fieldDef = {
+            key: row.field,
+            name: row.caption,
+            renderCell: formatters[row.formatter],
+          };
+          if(row.width) {
+            fieldDef.width = row.width;
+          }
+          if(row.editor && editors[row.editor]) {
+            fieldDef.renderEditCell = editors[row.editor];
+          }
+          return fieldDef;
+        })
+    }
+  }
+  classes.CatSchemeSettings = CatSchemeSettings;
+  exclude.push('cat.schemeSettings');
 };
