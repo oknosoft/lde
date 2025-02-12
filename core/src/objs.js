@@ -1198,7 +1198,7 @@ export class DocObj extends DataObj {
 
   constructor(attr, manager, loading) {
 
-    const direct = loading && attr && manager.utils.is_guid(attr.ref);
+    const direct = loading && attr && manager.utils.is.guid(attr.ref);
 
     // выполняем конструктор родительского объекта
     super(attr, manager, loading, direct);

@@ -257,3 +257,75 @@ export const meta = {
     },
   }
 };
+
+export default function formulasClasses({cat, classes, symbols, md, utils}, exclude) {
+
+  md.get('f').constructorBase();
+  const {CatFormulas: CatObj, CatFormulasManager: CatManager} = classes;
+  const {get, set} = symbols;
+
+  class CatFormulasManager extends CatManager {
+
+    loadFormulas(src) {
+      const {node, browser} = utils.is;
+      const compare = utils.sort('name');
+      const parents = [this.predefined('printing_plates'), this.predefined('modifiers')];
+      const filtered = [];
+      (src || this).forEach((v) => {
+        if(!v.disabled && parents.includes(v.parent)){
+          if(v.context === 1 && !browser || v.context === 2 && !node) {
+            return;
+          }
+          filtered.push(v);
+        }
+      });
+
+
+      filtered.sort(utils.sort('sorting_field')).forEach((formula) => {
+        // формируем списки печатных форм и внешних обработок
+        if(formula.parent == parents[0]) {
+          formula.params.findRows({param: 'destination'}, (dest) => {
+            const dmeta = md.get(dest.value);
+            if(dmeta) {
+              const tmp = dmeta.printing_plates ? Object.values(dmeta.printing_plates) : [];
+              tmp.push(formula);
+              tmp.sort(compare);
+              dmeta.printing_plates = {};
+              for(const elm of tmp) {
+                dmeta.printing_plates[`prn_${elm.ref}`] = elm;
+              }
+            }
+          });
+        }
+        else {
+          // выполняем модификаторы
+          try {
+            const res = formula.execute();
+            // еслм модификатор вернул задание кроносу - добавляем планировщик
+            //res && utils.cron && utils.cron(res);
+          }
+          catch (err) {
+            console.error(err);
+          }
+        }
+      });
+    }
+
+  }
+  classes.CatFormulasManager = CatFormulasManager;
+
+  class CatFormulas extends CatObj {
+
+    execute() {
+
+    }
+
+  }
+  classes.CatFormulas = CatFormulas;
+
+  exclude.push('cat.formulas');
+
+  md.once('complete_loaded', () => {
+    cat.formulas.loadFormulas();
+  });
+};

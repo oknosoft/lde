@@ -3,7 +3,7 @@ import {meta as log} from './log';
 import schemeSettingsClasses, {meta as schemeSettings} from './schemeSettings';
 import {meta as destinations} from './destinations';
 import {meta as values} from './propertyValues';
-import {meta as formulas} from './formulas';
+import formulasClasses, {meta as formulas} from './formulas';
 import {meta as servers} from './servers';
 import propertiesClasses, {meta as properties} from './properties';
 import predefinedElmntsClasses, {meta as predefinedElmnts} from './predefinedElmnts';
@@ -64,6 +64,7 @@ export const sysClasses = [
   usersClasses,
   abonentsClasses,
   branchesClasses,
+  formulasClasses,
   propertiesClasses,
   predefinedElmntsClasses,
   schemeSettingsClasses,

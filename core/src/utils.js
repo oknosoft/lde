@@ -420,6 +420,14 @@ class MetaUtils extends OwnerObj {
        */
       like(left, right) {
         return left && left.toString().toLowerCase().includes(right.toLowerCase());
+      },
+
+      get browser() {
+        return typeof window === 'object';
+      },
+
+      get node() {
+        return owner.jobPrm.isNode;
       }
     };
 
